@@ -179,6 +179,12 @@ body {
   align-items: center;
   gap: 0.8rem;
   margin-bottom: 2.5rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+.logo:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 .logo span {
   font-size: 2rem;
