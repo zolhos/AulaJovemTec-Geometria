@@ -73,19 +73,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Renderizar LaTeX em toda a página inicial na inicialização
-  setTimeout(() => {
-    const senoFormula = document.getElementById('katex-seno');
-    if (senoFormula) senoFormula.innerHTML = '$$\\text{sen}(\\theta) = \\frac{\\text{CO}}{\\text{H}}$$';
-    
-    const cossenoFormula = document.getElementById('katex-cosseno');
-    if (cossenoFormula) cossenoFormula.innerHTML = '$$\\text{cos}(\\theta) = \\frac{\\text{CA}}{\\text{H}}$$';
-    
-    const tangenteFormula = document.getElementById('katex-tangente');
-    if (tangenteFormula) tangenteFormula.innerHTML = '$$\\text{tg}(\\theta) = \\frac{\\text{CO}}{\\text{CA}}$$';
+  // Renderizar LaTeX em toda a página inicial de forma robusta contra lentidão da rede (polling)
+  function runInitialMathRender() {
+    if (window.renderMathInElement) {
+      const senoFormula = document.getElementById('katex-seno');
+      if (senoFormula) senoFormula.innerHTML = '$$\\text{sen}(\\theta) = \\frac{\\text{CO}}{\\text{H}}$$';
+      
+      const cossenoFormula = document.getElementById('katex-cosseno');
+      if (cossenoFormula) cossenoFormula.innerHTML = '$$\\text{cos}(\\theta) = \\frac{\\text{CA}}{\\text{H}}$$';
+      
+      const tangenteFormula = document.getElementById('katex-tangente');
+      if (tangenteFormula) tangenteFormula.innerHTML = '$$\\text{tg}(\\theta) = \\frac{\\text{CO}}{\\text{CA}}$$';
 
-    autoRenderMath(document.body);
-  }, 100);
+      autoRenderMath(document.body);
+    } else {
+      setTimeout(runInitialMathRender, 50);
+    }
+  }
+
+  runInitialMathRender();
 
 
   /* ==========================================
@@ -132,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Cateto Oposto: Vertical (a) -> Rosa/Magenta
       lineA.setAttribute('stroke', 'var(--accent-magenta)');
-      lblSideA.textContent = 'CATETO OPONENTE (a)';
+      lblSideA.textContent = 'CATETO OPOSTO (a)';
       lblSideA.setAttribute('fill', 'var(--accent-magenta)');
       cardCO.style.borderColor = 'var(--accent-magenta)';
       cardCO.classList.add('active');
@@ -172,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Cateto Oposto: Horizontal (b) -> Rosa/Magenta
       lineB.setAttribute('stroke', 'var(--accent-magenta)');
-      lblSideB.textContent = 'CATETO OPONENTE (b)';
+      lblSideB.textContent = 'CATETO OPOSTO (b)';
       lblSideB.setAttribute('fill', 'var(--accent-magenta)');
       cardCO.style.borderColor = 'var(--accent-magenta)';
       cardCO.classList.add('active');
