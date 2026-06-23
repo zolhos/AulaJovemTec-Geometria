@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrigonoMind - O Segredo dos Triângulos</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Explore a trigonometria de forma interativa. Aprenda sobre seno, cosseno, tangente, catetos e ângulos notáveis no triângulo retângulo com o melhor design moderno e simuladores 3D.">
+  <meta name="author" content="Antigravity & Diego Zolhos">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Rounded -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GMRi4iY451Kwy19b9gZAs9VN6w4v3J6Zz9zJ5X4C6F4oU/P2Jp8X1Xf7S0y5lE9/" crossorigin="anonymous">
+  
+  <!-- KaTeX JS (Deferred for performance) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cp1qwwyRyxc9qKTasIVCPe6imRqipbjc3CHgAHvObTR5LhHhnCky769f7UtdsC8f" crossorigin="anonymous"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- Custom Javascript -->
+  <script defer src="index.js"></script>
+</head>
+<body>
+  <!-- Background Glows (Visual Premium Aesthetics) -->
+  <div class="glow-bg glow-1"></div>
+  <div class="glow-bg glow-2"></div>
+  <div class="glow-bg glow-3"></div>
+
+  <!-- Navigation Bar (Glassmorphism Sidebar/Navbar) -->
+  <aside class="sidebar card">
+    <div class="logo">
+      <span class="material-symbols-rounded">change_history</span>
+      <h2>Trigono<span>Mind</span></h2>
+    </div>
+    <nav class="nav-menu">
+      <a href="#home" class="nav-link active" data-section="home">
+        <span class="material-symbols-rounded">home</span>
+        <span>Início</span>
+      </a>
+      <a href="#elementos" class="nav-link" data-section="elementos">
+        <span class="material-symbols-rounded">category</span>
+        <span>O Triângulo</span>
+      </a>
+      <a href="#simulador" class="nav-link" data-section="simulador">
+        <span class="material-symbols-rounded">insights</span>
+        <span>Simulador</span>
+      </a>
+      <a href="#tabela" class="nav-link" data-section="tabela">
+        <span class="material-symbols-rounded">grid_on</span>
+        <span>Tabela Notável</span>
+      </a>
+      <a href="#desafios" class="nav-link" data-section="desafios">
+        <span class="material-symbols-rounded">psychology</span>
+        <span>Desafios</span>
+      </a>
+      <a href="#quiz" class="nav-link" data-section="quiz">
+        <span class="material-symbols-rounded">quiz</span>
+        <span>Quiz</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <p>9º Ano • Matemática</p>
+    </div>
+  </aside>
+
+  <!-- Mobile Top Bar & Menu Toggle -->
+  <header class="mobile-header card">
+    <div class="logo">
+      <span class="material-symbols-rounded">change_history</span>
+      <h2>Trigono<span>Mind</span></h2>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menu">
+      <span class="material-symbols-rounded">menu</span>
+    </button>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- SECTION 0: HOME / INTRO -->
+    <section id="home" class="content-section active">
+      <div class="hero-card card">
+        <div class="hero-info">
+          <span class="badge">Matemática Divertida</span>
+          <h1>Desvende o Segredo dos <span>Triângulos</span></h1>
+          <p>
+            Você sabia que qualquer triângulo retângulo esconde proporções perfeitas que governam a altura dos prédios, a trajetória de foguetes e a engenharia de jogos? Bem-vindo ao mundo da <strong>Trigonometria</strong>!
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="navigateTo('elementos')">
+              Começar Aventura <span class="material-symbols-rounded">arrow_forward</span>
+            </button>
+            <button class="btn btn-secondary" onclick="navigateTo('simulador')">
+              Ver Simulador <span class="material-symbols-rounded">play_arrow</span>
+            </button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <svg viewBox="0 0 400 300" class="hero-svg">
+            <!-- Grid Background -->
+            <defs>
+              <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+              </pattern>
+              <linearGradient id="grad-tri" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="hsl(260, 95%, 65%)" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="hsl(180, 100%, 50%)" stop-opacity="0.6"/>
+              </linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+            <!-- Triangle -->
+            <polygon points="80,240 320,240 320,80" fill="url(#grad-tri)" stroke="hsl(260, 95%, 65%)" stroke-width="3" stroke-linejoin="round" />
+            <!-- Right Angle Square -->
+            <path d="M 305,240 L 305,225 L 320,225" fill="none" stroke="hsl(180, 100%, 50%)" stroke-width="2"/>
+            <circle cx="312.5" cy="232.5" r="2.5" fill="hsl(180, 100%, 50%)" />
+            <!-- Nodes -->
+            <circle cx="80" cy="240" r="6" fill="#fff" class="pulse-dot" />
+            <circle cx="320" cy="240" r="6" fill="#fff" />
+            <circle cx="320" cy="80" r="6" fill="#fff" />
+            <!-- Angle arc -->
+            <path d="M 120,240 A 40,40 0 0,0 114.6,217.3" fill="none" stroke="hsl(320, 100%, 60%)" stroke-width="3" />
+            <text x="130" y="230" fill="hsl(320, 100%, 60%)" font-family="Outfit" font-size="18" font-weight="bold">θ</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card card" onclick="navigateTo('elementos')">
+          <div class="icon-wrapper color-orange">
+            <span class="material-symbols-rounded">explore</span>
+          </div>
+          <h3>Batismo do Triângulo</h3>
+          <p>Aprenda a reconhecer a Hipotenusa e os Catetos Oposto e Adjacente com base no ângulo de referência.</p>
+        </div>
+        <div class="feature-card card" onclick="navigateTo('simulador')">
+          <div class="icon-wrapper color-cyan">
+            <span class="material-symbols-rounded">science</span>
+          </div>
+          <h3>Simulador Dinâmico</h3>
+          <p>Altere o ângulo e assista em tempo real ao crescimento e encolhimento do Seno, Cosseno e Tangente.</p>
+        </div>
+        <div class="feature-card card" onclick="navigateTo('tabela')">
+          <div class="icon-wrapper color-magenta">
+            <span class="material-symbols-rounded">table_chart</span>
+          </div>
+          <h3>Ângulos Notáveis</h3>
+          <p>Entenda a origem de valores mágicos como o 30°, 45° e 60° sem apenas precisar decorá-los!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: ELEMENTOS DO TRIÂNGULO -->
+    <section id="elementos" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 1</span>
+        <h1>Quem é Quem no <span>Triângulo Retângulo</span>?</h1>
+        <p>Antes de calcular, precisamos "dar nome aos bois". A posição dos catetos é relativa ao ângulo escolhido.</p>
+      </div>
+
+      <div class="elementos-layout">
+        <!-- Interactive Controls & SVG -->
+        <div class="interactive-panel card">
+          <div class="panel-header">
+            <h3>Selecione o Ângulo de Referência:</h3>
+            <div class="angle-selector">
+              <button class="btn btn-toggle active" id="btn-alpha" onclick="selectElementAngle('alpha')">
+                Ângulo Alpha (α)
+              </button>
+              <button class="btn btn-toggle" id="btn-beta" onclick="selectElementAngle('beta')">
+                Ângulo Beta (β)
+              </button>
+            </div>
+          </div>
+
+          <div class="svg-container">
+            <svg viewBox="0 0 500 350" id="elements-svg">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+                </marker>
+              </defs>
+              <rect width="100%" height="100%" fill="none"/>
+              <!-- Base Grid -->
+              <path d="M 50,300 L 450,300 M 400,50 L 400,300" stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-dasharray="4,4" />
+              <!-- Triangle -->
+              <polygon points="100,300 400,300 400,100" fill="rgba(255,255,255,0.02)" stroke="var(--text-primary)" stroke-width="2" />
+              <!-- Right Angle -->
+              <path d="M 385,300 L 385,285 L 400,285" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+              <circle cx="392.5" cy="292.5" r="2" fill="rgba(255,255,255,0.4)" />
+
+              <!-- Reference Angles Arcs -->
+              <!-- Alpha (bottom-left) -->
+              <path id="arc-alpha" d="M 140,300 A 40,40 0 0,0 134.6,277.3" fill="none" stroke="hsl(260, 95%, 65%)" stroke-width="4" />
+              <!-- Beta (top-right) -->
+              <path id="arc-beta" d="M 400,140 A 40,40 0 0,1 382.7,134.6" fill="none" stroke="hsl(320, 100%, 60%)" stroke-width="4" />
+
+              <!-- Vertex Labels -->
+              <text x="80" y="320" fill="var(--text-primary)" font-family="Outfit" font-size="16" font-weight="bold">A</text>
+              <text x="415" y="320" fill="var(--text-primary)" font-family="Outfit" font-size="16" font-weight="bold">C (90°)</text>
+              <text x="410" y="90" fill="var(--text-primary)" font-family="Outfit" font-size="16" font-weight="bold">B</text>
+
+              <!-- Angle Characters -->
+              <text x="145" y="292" id="text-alpha" fill="hsl(260, 95%, 65%)" font-family="Outfit" font-size="18" font-weight="bold">α</text>
+              <text x="382" y="165" id="text-beta" fill="hsl(320, 100%, 60%)" font-family="Outfit" font-size="18" font-weight="bold">β</text>
+
+              <!-- Sides (Glow dynamically) -->
+              <!-- Hypotenuse -->
+              <g id="side-hypotenuse">
+                <line x1="100" y1="300" x2="400" y2="100" stroke="hsl(180, 100%, 50%)" stroke-width="4" id="line-h"/>
+                <text x="220" y="180" fill="hsl(180, 100%, 50%)" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-33.7, 220, 180)">HIPOTENUSA</text>
+              </g>
+              <!-- Bottom Side (b) -->
+              <g id="side-adjacent">
+                <line x1="100" y1="300" x2="400" y2="300" stroke="var(--text-primary)" stroke-width="4" id="line-b" />
+                <text x="250" y="325" fill="var(--text-primary)" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" id="lbl-side-b">CATETO</text>
+              </g>
+              <!-- Vertical Side (a) -->
+              <g id="side-opposite">
+                <line x1="400" y1="300" x2="400" y2="100" stroke="var(--text-primary)" stroke-width="4" id="line-a" />
+                <text x="420" y="200" fill="var(--text-primary)" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="start" id="lbl-side-a">CATETO</text>
+              </g>
+
+              <!-- Dynamic Arrow showing Opposite direction -->
+              <line x1="100" y1="300" x2="280" y2="220" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)" id="op-arrow" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Information Cards -->
+        <div class="info-panel">
+          <div class="card term-card active" id="card-h">
+            <div class="term-title color-cyan">
+              <span class="material-symbols-rounded">network_check</span>
+              <h4>Hipotenusa</h4>
+            </div>
+            <p>É o maior lado do triângulo retângulo. Ela sempre fica do lado oposto ao ângulo reto ($90^\circ$). <strong>Nunca muda de lugar</strong>, independente do ângulo que você esteja analisando!</p>
+          </div>
+
+          <div class="card term-card" id="card-co">
+            <div class="term-title color-magenta">
+              <span class="material-symbols-rounded">call_made</span>
+              <h4>Cateto Oposto</h4>
+            </div>
+            <p id="desc-co">O cateto que fica exatamente "do outro lado" em relação ao ângulo selecionado. Se traçarmos uma seta saindo do ângulo, ela apontará diretamente para ele.</p>
+          </div>
+
+          <div class="card term-card" id="card-ca">
+            <div class="term-title color-purple">
+              <span class="material-symbols-rounded">subdirectory_arrow_right</span>
+              <h4>Cateto Adjacente</h4>
+            </div>
+            <p id="desc-ca">O cateto que ajuda a formar o ângulo selecionado, estando "colado" ou deitado sob ele. Lembre-se: "adjacente" significa "vizinho/ao lado"!</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="navigation-actions">
+        <button class="btn btn-primary" onclick="navigateTo('simulador')">
+          Ir para o Simulador <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 2: SIMULADOR TRIGONOMÉTRICO -->
+    <section id="simulador" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 2</span>
+        <h1>O Simulador Trigonométrico</h1>
+        <p>Ajuste o ângulo e veja como os valores do Seno, Cosseno e da Tangente se transformam dinamicamente.</p>
+      </div>
+
+      <div class="simulador-layout">
+        <!-- Interactive Panel (Left/Center) -->
+        <div class="interactive-panel card">
+          <div class="sim-controls">
+            <div class="control-group">
+              <label id="label-slider" for="angle-slider">Ângulo de Referência (<span id="slider-val">30</span>°):</label>
+              <input type="range" id="angle-slider" min="10" max="80" value="30" class="slider">
+            </div>
+            <div class="control-group">
+              <button class="btn btn-secondary btn-icon" id="btn-toggle-circle" onclick="toggleSimMode()">
+                <span class="material-symbols-rounded">adjust</span>
+                <span id="circle-toggle-text">Ver Círculo Unitário</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="svg-container">
+            <svg viewBox="-50 -50 400 400" id="sim-svg">
+              <defs>
+                <!-- Grids and Marks -->
+                <pattern id="sim-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="grad-cos" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="hsl(180, 100%, 50%)" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="hsl(180, 100%, 50%)" stop-opacity="0.8"/>
+                </linearGradient>
+                <linearGradient id="grad-sin" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="hsl(260, 95%, 65%)" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="hsl(260, 95%, 65%)" stop-opacity="0.8"/>
+                </linearGradient>
+              </defs>
+              <rect x="-50" y="-50" width="400" height="400" fill="url(#sim-grid)" />
+              
+              <!-- Axes (Visible in Circle mode) -->
+              <g id="sim-axes" opacity="0">
+                <line x1="-30" y1="250" x2="320" y2="250" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                <line x1="50" y1="-30" x2="50" y2="300" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                <text x="310" y="245" fill="rgba(255,255,255,0.4)" font-size="10">x</text>
+                <text x="55" y="-20" fill="rgba(255,255,255,0.4)" font-size="10">y</text>
+                
+                <!-- Unit circle arc -->
+                <path d="M 250,250 A 200,200 0 0,0 50,50" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+              </g>
+
+              <!-- Main SVG Triangle / Circle Shapes -->
+              <g id="sim-shapes">
+                <!-- Triangle Area -->
+                <polygon points="50,250 250,250 250,150" id="sim-poly" fill="rgba(255,255,255,0.01)" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                
+                <!-- Cosine line (CA) -->
+                <line x1="50" y1="250" x2="250" y2="250" id="line-cos" stroke="hsl(180, 100%, 50%)" stroke-width="4" stroke-linecap="round" />
+                
+                <!-- Sine line (CO) -->
+                <line x1="250" y1="250" x2="250" y2="150" id="line-sin" stroke="hsl(260, 95%, 65%)" stroke-width="4" stroke-linecap="round" />
+                
+                <!-- Hypotenuse (H) -->
+                <line x1="50" y1="250" x2="250" y2="150" id="line-hyp" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+
+                <!-- Tangent Line -->
+                <line x1="250" y1="250" x2="250" y2="50" id="line-tan" stroke="hsl(320, 100%, 60%)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2,2" opacity="0.3"/>
+                
+                <!-- Right angle marker -->
+                <path id="sim-right-angle" d="M 238,250 L 238,238 L 250,238" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+
+                <!-- Angle Arc -->
+                <path id="sim-angle-arc" d="M 80,250 A 30,30 0 0,0 77.2,238.5" fill="none" stroke="hsl(320, 100%, 60%)" stroke-width="3" />
+                
+                <!-- Drag anchor dot -->
+                <circle cx="250" cy="150" r="8" fill="#ffffff" stroke="hsl(260, 95%, 65%)" stroke-width="3" class="pulse-dot" id="sim-handle" style="cursor: grab;" />
+              </g>
+
+              <!-- Dynamic Labels on Drawing -->
+              <text x="65" y="244" id="lbl-sim-angle" fill="hsl(320, 100%, 60%)" font-family="Outfit" font-size="12" font-weight="bold">θ</text>
+              <text x="150" y="265" id="lbl-sim-cos" fill="hsl(180, 100%, 50%)" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">CA = 0.87</text>
+              <text x="262" y="200" id="lbl-sim-sin" fill="hsl(260, 95%, 65%)" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="start">CO = 0.50</text>
+              <text x="140" y="190" id="lbl-sim-hyp" fill="#ffffff" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle" transform="rotate(-30, 140, 190)">H = 1.00</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Calculations Dashboard (Right) -->
+        <div class="sim-dashboard">
+          <div class="card dashboard-card">
+            <h3>Fórmulas e Proporções</h3>
+            
+            <div class="ratio-item">
+              <div class="ratio-header">
+                <span class="formula-badge color-bg-purple">SENO</span>
+                <span id="katex-seno">$$\text{sen}(\theta) = \frac{\text{CO}}{\text{H}}$$</span>
+              </div>
+              <div class="ratio-bar-wrapper">
+                <div class="ratio-bar fill-purple" id="bar-sen" style="width: 50%;"></div>
+              </div>
+              <p class="ratio-calc" id="calc-sen">$$\text{sen}(30^\circ) = \frac{0.50}{1.00} = 0.50$$</p>
+            </div>
+
+            <div class="ratio-item">
+              <div class="ratio-header">
+                <span class="formula-badge color-bg-cyan">COSSENO</span>
+                <span id="katex-cosseno">$$\text{cos}(\theta) = \frac{\text{CA}}{\text{H}}$$</span>
+              </div>
+              <div class="ratio-bar-wrapper">
+                <div class="ratio-bar fill-cyan" id="bar-cos" style="width: 87%;"></div>
+              </div>
+              <p class="ratio-calc" id="calc-cos">$$\text{cos}(30^\circ) = \frac{0.87}{1.00} = 0.87$$</p>
+            </div>
+
+            <div class="ratio-item">
+              <div class="ratio-header">
+                <span class="formula-badge color-bg-magenta">TANGENTE</span>
+                <span id="katex-tangente">$$\text{tg}(\theta) = \frac{\text{CO}}{\text{CA}}$$</span>
+              </div>
+              <div class="ratio-bar-wrapper">
+                <div class="ratio-bar fill-magenta" id="bar-tan" style="width: 58%;"></div>
+              </div>
+              <p class="ratio-calc" id="calc-tan">$$\text{tg}(30^\circ) = \frac{0.50}{0.87} = 0.58$$</p>
+            </div>
+          </div>
+          
+          <div class="card pedagogical-insight">
+            <span class="material-symbols-rounded color-orange">lightbulb</span>
+            <h4>Percepção do 9º Ano</h4>
+            <p id="insight-text">
+              Note que, se o ângulo de inclinação aumentasse, a altura (Seno) aumentaria de tamanho, enquanto a base (Cosseno) ficaria menor. A Tangente mostra a taxa de crescimento da rampa!
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('elementos')">
+          <span class="material-symbols-rounded">arrow_back</span> Elementos
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('tabela')">
+          Ver Tabela Notável <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 3: TABELA DE ÂNGULOS NOTÁVEIS -->
+    <section id="tabela" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 3</span>
+        <h1>Os Ângulos Notáveis (30°, 45° e 60°)</h1>
+        <p>Estes são os ângulos mais utilizados no cotidiano e nas provas. Veja a tabela de valores perfeitos.</p>
+      </div>
+
+      <div class="tabela-layout">
+        <!-- Interactive Table Card -->
+        <div class="card table-card">
+          <table class="trig-table">
+            <thead>
+              <tr>
+                <th>Razão</th>
+                <th>30°</th>
+                <th>45°</th>
+                <th>60°</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="row-sen">
+                <td>Seno</td>
+                <td data-angle="30" class="hoverable">$$\frac{1}{2}$$</td>
+                <td data-angle="45" class="hoverable">$$\frac{\sqrt{2}}{2}$$</td>
+                <td data-angle="60" class="hoverable">$$\frac{\sqrt{3}}{2}$$</td>
+              </tr>
+              <tr id="row-cos">
+                <td>Cosseno</td>
+                <td data-angle="30" class="hoverable">$$\frac{\sqrt{3}}{2}$$</td>
+                <td data-angle="45" class="hoverable">$$\frac{\sqrt{2}}{2}$$</td>
+                <td data-angle="60" class="hoverable">$$\frac{1}{2}$$</td>
+              </tr>
+              <tr id="row-tan">
+                <td>Tangente</td>
+                <td data-angle="30" class="hoverable">$$\frac{\sqrt{3}}{3}$$</td>
+                <td data-angle="45" class="hoverable">$$1$$</td>
+                <td data-angle="60" class="hoverable">$$\sqrt{3}$$</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-tip">
+            <span class="material-symbols-rounded">info</span>
+            <p>Passe o mouse ou toque nos valores para destacar sua proporção!</p>
+          </div>
+        </div>
+
+        <!-- Geometric Derivations Panel -->
+        <div class="card derivation-card">
+          <div class="tabs-header">
+            <button class="btn btn-tab active" onclick="switchDerivation('45', this)">Origem do 45°</button>
+            <button class="btn btn-tab" onclick="switchDerivation('30-60', this)">Origem do 30° / 60°</button>
+          </div>
+          
+          <div class="tab-content" id="deriv-45">
+            <div class="deriv-text">
+              <h4>A Diagonal do Quadrado</h4>
+              <p>
+                Imagine um quadrado de lado $L$. Se passarmos uma diagonal, dividimos o quadrado em dois triângulos retângulos com ângulos agudos de $45^\circ$.
+              </p>
+              <p>
+                Pelo teorema de Pitágoras, a hipotenusa (diagonal) vale $L\sqrt{2}$. Como os catetos oposto e adjacente são iguais a $L$, temos:
+              </p>
+              <div class="katex-block">
+                $$\text{sen}(45^\circ) = \frac{L}{L\sqrt{2}} = \frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2}$$
+              </div>
+            </div>
+            <div class="deriv-visual">
+              <svg viewBox="0 0 200 200" class="deriv-svg">
+                <rect x="20" y="20" width="140" height="140" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                <polygon points="20,160 160,160 160,20" fill="rgba(180, 100%, 50%, 0.1)" stroke="hsl(180, 100%, 50%)" stroke-width="2.5" />
+                <path d="M 148,160 L 148,148 L 160,148" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                <circle cx="154" cy="154" r="1.5" fill="rgba(255,255,255,0.4)" />
+                <path d="M 50,160 A 30,30 0 0,0 41.2,138.8" fill="none" stroke="hsl(320, 100%, 60%)" stroke-width="2" />
+                <text x="50" y="150" fill="hsl(320, 100%, 60%)" font-size="12" font-weight="bold">45°</text>
+                <text x="90" y="175" fill="var(--text-primary)" font-size="12">L (Cateto)</text>
+                <text x="168" y="90" fill="var(--text-primary)" font-size="12">L (Cateto)</text>
+                <text x="65" y="80" fill="hsl(180, 100%, 50%)" font-size="12" font-weight="bold" transform="rotate(-45, 65, 80)">Hipotenusa = L√2</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="tab-content hidden" id="deriv-30-60">
+            <div class="deriv-text">
+              <h4>O Triângulo Equilátero Dobrado</h4>
+              <p>
+                Considere um triângulo equilátero de lado $L$ (onde todos os ângulos medem $60^\circ$). Se traçarmos a altura, dividimos ele na metade!
+              </p>
+              <p>
+                Isso gera um triângulo retângulo onde a base mede $\frac{L}{2}$, a hipotenusa mede $L$, e o topo mede $30^\circ$. A altura (altura do triângulo) vale $\frac{L\sqrt{3}}{2}$. Logo:
+              </p>
+              <div class="katex-block">
+                $$\text{sen}(30^\circ) = \frac{L/2}{L} = \frac{1}{2}$$
+                $$\text{sen}(60^\circ) = \frac{L\sqrt{3}/2}{L} = \frac{\sqrt{3}}{2}$$
+              </div>
+            </div>
+            <div class="deriv-visual">
+              <svg viewBox="0 0 200 200" class="deriv-svg">
+                <polygon points="100,20 20,160 180,160" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-dasharray="3,3" />
+                <polygon points="100,20 100,160 180,160" fill="rgba(260, 95%, 65%, 0.1)" stroke="hsl(260, 95%, 65%)" stroke-width="2.5" />
+                <path d="M 100,148 L 112,148 L 112,160" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                <circle cx="106" cy="154" r="1.5" fill="rgba(255,255,255,0.4)" />
+                
+                <path d="M 150,160 A 30,30 0 0,0 165,134" fill="none" stroke="hsl(320, 100%, 60%)" stroke-width="2" />
+                <text x="135" y="152" fill="hsl(320, 100%, 60%)" font-size="12" font-weight="bold">60°</text>
+                
+                <path d="M 100,50 A 30,30 0 0,1 115,46" fill="none" stroke="hsl(180, 100%, 50%)" stroke-width="2" />
+                <text x="104" y="66" fill="hsl(180, 100%, 50%)" font-size="11" font-weight="bold">30°</text>
+                
+                <text x="140" y="175" fill="var(--text-primary)" font-size="11">L/2</text>
+                <text x="145" y="85" fill="var(--text-primary)" font-size="11">L (H)</text>
+                <text x="60" y="90" fill="hsl(260, 95%, 65%)" font-size="11">Altura = L√3/2</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('simulador')">
+          <span class="material-symbols-rounded">arrow_back</span> Simulador
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('desafios')">
+          Ver Desafios Resolvidos <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 4: EXERCÍCIOS RESOLVIDOS -->
+    <section id="desafios" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 4</span>
+        <h1>Desafios Resolvidos</h1>
+        <p>Aprenda a aplicar os conceitos na prática com exemplos clássicos e cotidianos passo a passo.</p>
+      </div>
+
+      <div class="desafios-container" id="challenges-list">
+        <!-- Rendered dynamically in JS for cleaner code and KaTeX support -->
+      </div>
+
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('tabela')">
+          <span class="material-symbols-rounded">arrow_back</span> Tabela Notável
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('quiz')">
+          Ir para o Quiz Final <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 5: QUIZ INTERATIVO -->
+    <section id="quiz" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa Final</span>
+        <h1>Quiz de Sobrevivência</h1>
+        <p>Prove o que você aprendeu! Responda às 5 perguntas e teste sua mente geométrica.</p>
+      </div>
+
+      <div class="quiz-container">
+        <!-- Dashboard Score / Progress -->
+        <div class="quiz-progress-card card">
+          <div class="progress-info">
+            <span id="quiz-question-num">Pergunta 1 de 5</span>
+            <span id="quiz-score-num">Pontuação: 0</span>
+          </div>
+          <div class="quiz-progress-bar-wrapper">
+            <div class="quiz-progress-bar" id="quiz-progress" style="width: 20%;"></div>
+          </div>
+        </div>
+
+        <!-- Dynamic Question Area -->
+        <div class="card quiz-card" id="quiz-card-content">
+          <!-- Rendered in JS -->
+        </div>
+
+        <!-- Actions -->
+        <div class="quiz-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary hidden" id="btn-next-question" onclick="nextQuizQuestion()">
+            Próxima Questão <span class="material-symbols-rounded">navigate_next</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Info -->
+  <footer class="main-footer">
+    <p>© 2026 TrigonoMind. Criado com fins pedagógicos para a Jovens Cientistas/JovemTec.</p>
+  </footer>
+</body>
+</html>
