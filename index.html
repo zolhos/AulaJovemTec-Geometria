@@ -23,6 +23,9 @@
   <!-- KaTeX JS (Deferred for performance) -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cp1qwwyRyxc9qKTasIVCPe6imRqipbjc3CHgAHvObTR5LhHhnCky769f7UtdsC8f" crossorigin="anonymous"></script>
   
+  <!-- KaTeX Auto-Render Extension -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ11XPnYx4jXXEGOPc1QGPDB/SVnh633yQH35TxyyV7OItFNz" crossorigin="anonymous"></script>
+  
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="index.css">
   
@@ -35,8 +38,11 @@
   <div class="glow-bg glow-2"></div>
   <div class="glow-bg glow-3"></div>
 
-  <!-- Navigation Bar (Glassmorphism Sidebar/Navbar) -->
-  <aside class="sidebar card">
+  <!-- App Container (Centers Sidebar + Main Content on Desktop) -->
+  <div class="app-container">
+
+    <!-- Navigation Bar (Glassmorphism Sidebar/Navbar) -->
+    <aside class="sidebar card">
     <div class="logo">
       <span class="material-symbols-rounded">change_history</span>
       <h2>Trigono<span>Mind</span></h2>
@@ -602,11 +608,12 @@
       </div>
     </section>
 
+    <!-- Footer Info inside Main Content for alignment -->
+    <footer class="main-footer">
+      <p>© 2026 TrigonoMind. Criado com fins pedagógicos para a Jovens Cientistas/JovemTec.</p>
+    </footer>
   </main>
 
-  <!-- Footer Info -->
-  <footer class="main-footer">
-    <p>© 2026 TrigonoMind. Criado com fins pedagógicos para a Jovens Cientistas/JovemTec.</p>
-  </footer>
+  </div> <!-- End .app-container -->
 </body>
 </html>

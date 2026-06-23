@@ -54,27 +54,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Helper para renderizar formulas de forma segura com KaTeX
-  function renderMath(latex, elementId) {
-    const el = document.getElementById(elementId);
-    if (el && window.katex) {
+  // Helper para acionar a renderização em lote usando Auto-Render
+  window.autoRenderMath = function(element = document.body) {
+    if (window.renderMathInElement) {
       try {
-        window.katex.render(latex, el, {
-          throwOnError: false,
-          displayMode: false
+        window.renderMathInElement(element, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
         });
       } catch (err) {
-        console.error("Erro KaTeX:", err);
-        el.textContent = latex;
+        console.error("Erro Auto-Render:", err);
       }
     }
-  }
+  };
 
-  // Renderizar LaTeX das fórmulas básicas na inicialização
+  // Renderizar LaTeX em toda a página inicial na inicialização
   setTimeout(() => {
-    renderMath('\\text{sen}(\\theta) = \\frac{\\text{CO}}{\\text{H}}', 'katex-seno');
-    renderMath('\\text{cos}(\\theta) = \\frac{\\text{CA}}{\\text{H}}', 'katex-cosseno');
-    renderMath('\\text{tg}(\\theta) = \\frac{\\text{CO}}{\\text{CA}}', 'katex-tangente');
+    const senoFormula = document.getElementById('katex-seno');
+    if (senoFormula) senoFormula.innerHTML = '$$\\text{sen}(\\theta) = \\frac{\\text{CO}}{\\text{H}}$$';
+    
+    const cossenoFormula = document.getElementById('katex-cosseno');
+    if (cossenoFormula) cossenoFormula.innerHTML = '$$\\text{cos}(\\theta) = \\frac{\\text{CA}}{\\text{H}}$$';
+    
+    const tangenteFormula = document.getElementById('katex-tangente');
+    if (tangenteFormula) tangenteFormula.innerHTML = '$$\\text{tg}(\\theta) = \\frac{\\text{CO}}{\\text{CA}}$$';
+
+    autoRenderMath(document.body);
   }, 100);
 
 
@@ -327,9 +337,15 @@ document.addEventListener('DOMContentLoaded', () => {
     barTan.style.width = `${Math.min(tanVal, 1.8) * 55}%`;
 
     // Atualiza equações dinâmicas via KaTeX
-    renderMath(`\\text{sen}(${angle}^\\circ) = \\frac{${sinVal.toFixed(2)}}{1.00} = ${sinVal.toFixed(2)}`, 'calc-sen');
-    renderMath(`\\text{cos}(${angle}^\\circ) = \\frac{${cosVal.toFixed(2)}}{1.00} = ${cosVal.toFixed(2)}`, 'calc-cos');
-    renderMath(`\\text{tg}(${angle}^\\circ) = \\frac{${sinVal.toFixed(2)}}{${cosVal.toFixed(2)}} = ${tanVal.toFixed(2)}`, 'calc-tan');
+    const calcSen = document.getElementById('calc-sen');
+    const calcCos = document.getElementById('calc-cos');
+    const calcTan = document.getElementById('calc-tan');
+
+    if (calcSen) calcSen.innerHTML = `$$\\text{sen}(${angle}^\\circ) = \\frac{${sinVal.toFixed(2)}}{1.00} = ${sinVal.toFixed(2)}$$`;
+    if (calcCos) calcCos.innerHTML = `$$\\text{cos}(${angle}^\\circ) = \\frac{${cosVal.toFixed(2)}}{1.00} = ${cosVal.toFixed(2)}$$`;
+    if (calcTan) calcTan.innerHTML = `$$\\text{tg}(${angle}^\\circ) = \\frac{${sinVal.toFixed(2)}}{${cosVal.toFixed(2)}} = ${tanVal.toFixed(2)}$$`;
+
+    autoRenderMath(document.querySelector('.sim-dashboard'));
 
     // Insights pedagógicos baseados no ângulo
     if (angle < 30) {
@@ -412,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badge: "Cotidiano • Alturas",
       title: "1. A Altura da Torre de Energia",
       statement: "Um técnico em telecomunicações está a uma distância de 40 metros de uma antena de celular. Ele usa um teodolito (instrumento para medir ângulos) e observa o ponto mais alto da torre sob um ângulo de 30°. Sabendo que a altura do instrumento é desprezível, qual é a altura aproximada da torre?",
-      formula: "\\text{tg}(30^\\circ) = \\frac{\\text{Altura}}{\\text{Distância}}",
+      formula: "$$\\text{tg}(30^\\circ) = \\frac{\\text{Altura}}{\\text{Distância}}$$ ",
       illustration: `
         <svg viewBox="0 0 260 200">
           <!-- Ground line -->
@@ -438,10 +454,10 @@ document.addEventListener('DOMContentLoaded', () => {
         "Primeiro, identificamos os elementos do triângulo formados na situação:",
         "O lado que queremos descobrir é a altura da torre, que em relação ao ângulo de 30° é o <strong>Cateto Oposto (CO)</strong>.",
         "A distância de 40 metros até a base da torre é o nosso <strong>Cateto Adjacente (CA)</strong>.",
-        "A razão trigonométrica que relaciona Cateto Oposto e Cateto Adjacente é a <strong>Tangente</strong>: \\text{tg}(30^\\circ) = \\frac{\\text{CO}}{\\text{CA}}",
-        "Substituímos os valores conhecidos na fórmula: \\frac{\\sqrt{3}}{3} = \\frac{h}{40}",
-        "Multiplicando cruzado: 3 \\cdot h = 40\\sqrt{3} \\Rightarrow h = \\frac{40\\sqrt{3}}{3}",
-        "Considerando que \\sqrt{3} \\approx 1.73, temos: h \\approx \\frac{40 \\cdot 1.73}{3} \\approx \\frac{69.2}{3} \\approx 23.1 \\text{ metros}.",
+        "A razão trigonométrica que relaciona Cateto Oposto e Cateto Adjacente é a <strong>Tangente</strong>: $\\text{tg}(30^\\circ) = \\frac{\\text{CO}}{\\text{CA}}$",
+        "Substituímos os valores conhecidos na fórmula: $\\frac{\\sqrt{3}}{3} = \\frac{h}{40}$",
+        "Multiplicando cruzado: $3 \\cdot h = 40\\sqrt{3} \\Rightarrow h = \\frac{40\\sqrt{3}}{3}$",
+        "Considerando que $\\sqrt{3} \\approx 1.73$, temos: $h \\approx \\frac{40 \\cdot 1.73}{3} \\approx \\frac{69.2}{3} \\approx 23.1 \\text{ metros}$.",
         "<strong>Resposta:</strong> A altura da torre é de aproximadamente <strong>23,1 metros</strong>."
       ]
     },
@@ -450,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badge: "Diversão • Alturas",
       title: "2. O Voo Empolgante da Pipa",
       statement: "Lucas está brincando no parque em um dia ensolarado. Ele soltou toda a linha de seu carretel, totalizando 80 metros de fio. Devido ao vento forte, a linha fica totalmente esticada e faz um ângulo de 60° com a linha do horizonte. A que altura a pipa está voando acima das mãos de Lucas?",
-      formula: "\\text{sen}(60^\\circ) = \\frac{\\text{Altura}}{\\text{Linha}}",
+      formula: "$$\\text{sen}(60^\\circ) = \\frac{\\text{Altura}}{\\text{Linha}}$$",
       illustration: `
         <svg viewBox="0 0 260 200">
           <line x1="10" y1="180" x2="250" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
@@ -473,10 +489,10 @@ document.addEventListener('DOMContentLoaded', () => {
         "Identificamos os lados com base no ângulo de 60°:",
         "O comprimento da linha esticada (80m) é a <strong>Hipotenusa (H)</strong> do triângulo.",
         "A altura que a pipa atinge em relação às mãos é o <strong>Cateto Oposto (CO)</strong>.",
-        "A relação correta que usa CO e H é o <strong>Seno</strong>: \\text{sen}(60^\\circ) = \\frac{\\text{CO}}{\\text{H}}",
-        "Substituindo os valores da nossa tabela de notáveis: \\frac{\\sqrt{3}}{2} = \\frac{h}{80}",
-        "Isolamos a variável multiplicando cruzado: 2 \\cdot h = 80\\sqrt{3} \\Rightarrow h = 40\\sqrt{3}",
-        "Substituindo o valor aproximado da raiz: h \\approx 40 \\cdot 1.73 \\approx 69.2 \\text{ metros}.",
+        "A relação correta que usa CO e H é o <strong>Seno</strong>: $\\text{sen}(60^\\circ) = \\frac{\\text{CO}}{\\text{H}}$",
+        "Substituindo os valores da nossa tabela de notáveis: $\\frac{\\sqrt{3}}{2} = \\frac{h}{80}$",
+        "Isolamos a variável multiplicando cruzado: $2 \\cdot h = 80\\sqrt{3} \\Rightarrow h = 40\\sqrt{3}$",
+        "Substituindo o valor aproximado da raiz: $h \\approx 40 \\cdot 1.73 \\approx 69.2 \\text{ metros}$.",
         "<strong>Resposta:</strong> A pipa está voando a aproximadamente <strong>69,2 metros</strong> de altura."
       ]
     },
@@ -485,7 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badge: "Inclusão • Rampas",
       title: "3. Rampa de Acessibilidade",
       statement: "Uma escola resolveu construir uma rampa metálica de acessibilidade para ligar o pátio a uma plataforma elevada de 2 metros de altura. Por regras de segurança para cadeirantes, a rampa deve ter uma inclinação máxima de 30° com o solo. Qual deve ser o comprimento da pista da rampa?",
-      formula: "\\text{sen}(30^\\circ) = \\frac{\\text{Altura}}{\\text{Comprimento}}",
+      formula: "$$\\text{sen}(30^\\circ) = \\frac{\\text{Altura}}{\\text{Comprimento}}$$",
       illustration: `
         <svg viewBox="0 0 260 200">
           <line x1="10" y1="180" x2="250" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
@@ -506,9 +522,9 @@ document.addEventListener('DOMContentLoaded', () => {
         "A rampa forma uma hipotenusa e a subida de 2m representa o cateto oposto ao ângulo:",
         "Altura da plataforma = 2m é o <strong>Cateto Oposto (CO)</strong>.",
         "O comprimento total da pista da rampa (d) é a <strong>Hipotenusa (H)</strong>.",
-        "Usamos a fórmula do <strong>Seno</strong>: \\text{sen}(30^\\circ) = \\frac{\\text{CO}}{\\text{H}}",
-        "Substituindo a razão de 30° da tabela: \\frac{1}{2} = \\frac{2}{d}",
-        "Multiplicando cruzado: d \\cdot 1 = 2 \\cdot 2 \\Rightarrow d = 4 \\text{ metros}.",
+        "Usamos a fórmula do <strong>Seno</strong>: $\\text{sen}(30^\\circ) = \\frac{\\text{CO}}{\\text{H}}$",
+        "Substituindo a razão de 30° da tabela: $\\frac{1}{2} = \\frac{2}{d}$",
+        "Multiplicando cruzado: $d \\cdot 1 = 2 \\cdot 2 \\Rightarrow d = 4 \\text{ metros}$.",
         "<strong>Resposta:</strong> O comprimento da pista da rampa deve ser de exatamente <strong>4 metros</strong>."
       ]
     }
@@ -538,29 +554,18 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="material-symbols-rounded">check_circle</span>
               Resolução Prática
             </h4>
-            <p><strong>Fórmula Aplicada:</strong> <span id="formula-latex-${ch.id}"></span></p>
+            <p><strong>Fórmula Aplicada:</strong></p>
+            <div class="katex-block">${ch.formula}</div>
             <ol>
-              ${ch.steps.map(step => {
-                // Se o passo contiver um cifrão ou barra (LaTeX), será renderizado depois
-                if (step.includes('\\')) {
-                  const stepId = `step-${ch.id}-${Math.random().toString(36).substr(2, 9)}`;
-                  setTimeout(() => {
-                    renderMath(step.replace(/<\/?strong>/g, ''), stepId);
-                  }, 100);
-                  return `<li><span id="${stepId}">${step}</span></li>`;
-                }
-                return `<li>${step}</li>`;
-              }).join('')}
+              ${ch.steps.map(step => `<li>${step}</li>`).join('')}
             </ol>
           </div>
         </div>
       </div>
     `).join('');
 
-    // Renderiza a fórmula do desafio via KaTeX
-    challenges.forEach(ch => {
-      renderMath(ch.formula, `formula-latex-${ch.id}`);
-    });
+    // Renderiza toda a matemática do bloco
+    autoRenderMath(listContainer);
   }
 
   window.toggleResolution = function(id, btn) {
@@ -598,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "O lado que está vizinho ao ângulo reto mas na diagonal."
       ],
       correct: 1, // B
-      explanation: "A Hipotenusa é, por definição fundamental, o lado localizado de frente (oposto) ao ângulo reto de 90°. Em qualquer triângulo retângulo, a hipotenusa também será sempre o lado mais comprido."
+      explanation: "A Hipotenusa é, por definição fundamental, o lado localizado de frente (oposto) ao ângulo reto de $90^\\circ$. Em qualquer triângulo retângulo, a hipotenusa também será sempre o lado mais comprido."
     },
     {
       id: 2,
@@ -611,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "O cateto que ajuda a formar o ângulo α (está colado a ele)."
       ],
       correct: 3, // D
-      explanation: "A palavra 'adjacente' significa vizinho ou encostado. Portanto, o Cateto Adjacente ao ângulo α é o cateto que ajuda a compor este ângulo, servindo de base para o mesmo."
+      explanation: "A palavra 'adjacente' significa vizinho ou encostado. Portanto, o Cateto Adjacente ao ângulo $\\alpha$ é o cateto que ajuda a compor este ângulo, servindo de base para o mesmo."
     },
     {
       id: 3,
@@ -624,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "3.5 metros"
       ],
       correct: 0, // A
-      explanation: "A pista de 6m é a Hipotenusa e a altura é o Cateto Oposto ao ângulo de 30°. Usamos \\text{sen}(30^\\circ) = \\frac{h}{6}. Como \\text{sen}(30^\\circ) = 0.5, temos: 0.5 = \\frac{h}{6} \\Rightarrow h = 3\\text{m}."
+      explanation: "A pista de 6m é a Hipotenusa e a altura é o Cateto Oposto ao ângulo de $30^\\circ$. Usamos $\\text{sen}(30^\\circ) = \\frac{h}{6}$. Como $\\text{sen}(30^\\circ) = 0.5$, temos: $0.5 = \\frac{h}{6} \\Rightarrow h = 3\\text{m}$."
     },
     {
       id: 4,
@@ -637,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "90°"
       ],
       correct: 2, // C
-      explanation: "No ângulo de 45°, o triângulo retângulo é isósceles (os dois catetos são idênticos). Logo, a razão CO/H e CA/H dão exatamente a mesma medida: \\frac{\\sqrt{2}}{2}."
+      explanation: "No ângulo de $45^\\circ$, o triângulo retângulo é isósceles (os dois catetos são idênticos). Logo, a razão CO/H e CA/H dão exatamente a mesma medida: $\\frac{\\sqrt{2}}{2}$."
     },
     {
       id: 5,
@@ -646,11 +651,11 @@ document.addEventListener('DOMContentLoaded', () => {
       options: [
         "5 metros",
         "20 metros",
-        "10√3 metros",
+        "$10\\sqrt{3}$ metros",
         "10 metros"
       ],
       correct: 2, // C
-      explanation: "A altura é o Cateto Oposto e a distância de 10m é o Cateto Adjacente. Usamos a Tangente: \\text{tg}(60^\\circ) = \\frac{h}{10}. Como \\text{tg}(60^\\circ) = \\sqrt{3}, temos: \\sqrt{3} = \\frac{h}{10} \\Rightarrow h = 10\\sqrt{3}\\text{m}."
+      explanation: "A altura é o Cateto Oposto e a distância de 10m é o Cateto Adjacente. Usamos a Tangente: $\\text{tg}(60^\\circ) = \\frac{h}{10}$. Como $\\text{tg}(60^\\circ) = \\sqrt{3}$, temos: $\\sqrt{3} = \\frac{h}{10} \\Rightarrow h = 10\\sqrt{3}\\text{m}$."
     }
   ];
 
@@ -698,6 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
+    autoRenderMath(cardContent);
   }
 
   window.selectQuizOption = function(selectedIdx) {
@@ -737,14 +743,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('quiz-score-num').textContent = `Pontuação: ${quizScore}`;
 
     // Renderiza a explicação com suporte LaTeX
-    fbDesc.id = `fb-desc-rendered-${currentQuestionIndex}`;
     fbDesc.innerHTML = q.explanation;
     feedbackBox.classList.remove('hidden');
 
-    // Se a explicação tiver notações LaTeX (barras), renderizamos com KaTeX
-    if (q.explanation.includes('\\')) {
-      renderMath(q.explanation, fbDesc.id);
-    }
+    // Renderiza KaTeX no box de feedback e na área da questão
+    autoRenderMath(feedbackBox);
+    autoRenderMath(cardContent);
 
     btnNext.classList.remove('hidden');
   };
