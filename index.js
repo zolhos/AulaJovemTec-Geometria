@@ -754,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Renderiza KaTeX no box de feedback e na área da questão
     autoRenderMath(feedbackBox);
-    autoRenderMath(cardContent);
+    autoRenderMath(document.getElementById('quiz-card-content'));
 
     btnNext.classList.remove('hidden');
   };
