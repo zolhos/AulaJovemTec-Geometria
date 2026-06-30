@@ -52,26 +52,64 @@
         <span class="material-symbols-rounded">home</span>
         <span>Início</span>
       </a>
-      <a href="#elementos" class="nav-link" data-section="elementos">
-        <span class="material-symbols-rounded">category</span>
-        <span>O Triângulo</span>
-      </a>
-      <a href="#simulador" class="nav-link" data-section="simulador">
-        <span class="material-symbols-rounded">insights</span>
-        <span>Simulador</span>
-      </a>
-      <a href="#tabela" class="nav-link" data-section="tabela">
-        <span class="material-symbols-rounded">grid_on</span>
-        <span>Tabela Notável</span>
-      </a>
-      <a href="#desafios" class="nav-link" data-section="desafios">
-        <span class="material-symbols-rounded">psychology</span>
-        <span>Desafios</span>
-      </a>
-      <a href="#quiz" class="nav-link" data-section="quiz">
-        <span class="material-symbols-rounded">quiz</span>
-        <span>Quiz</span>
-      </a>
+
+      <!-- Seletor de Partes -->
+      <div class="part-selector">
+        <button class="part-btn active" id="part-btn-1" onclick="switchPart(1, event)">Parte 1</button>
+        <button class="part-btn" id="part-btn-2" onclick="switchPart(2, event)">Parte 2</button>
+      </div>
+
+      <!-- Links da Parte 1 -->
+      <div id="links-parte-1" class="nav-links-group">
+        <a href="#elementos" class="nav-link" data-section="elementos">
+          <span class="material-symbols-rounded">category</span>
+          <span>O Triângulo</span>
+        </a>
+        <a href="#simulador" class="nav-link" data-section="simulador">
+          <span class="material-symbols-rounded">insights</span>
+          <span>Simulador</span>
+        </a>
+        <a href="#tabela" class="nav-link" data-section="tabela">
+          <span class="material-symbols-rounded">grid_on</span>
+          <span>Tabela Notável</span>
+        </a>
+        <a href="#desafios" class="nav-link" data-section="desafios">
+          <span class="material-symbols-rounded">psychology</span>
+          <span>Desafios</span>
+        </a>
+        <a href="#quiz" class="nav-link" data-section="quiz">
+          <span class="material-symbols-rounded">quiz</span>
+          <span>Quiz</span>
+        </a>
+      </div>
+
+      <!-- Links da Parte 2 -->
+      <div id="links-parte-2" class="nav-links-group hidden">
+        <a href="#p2-intro" class="nav-link" data-section="p2-intro">
+          <span class="material-symbols-rounded">history_edu</span>
+          <span>História e GPS</span>
+        </a>
+        <a href="#p2-tabela" class="nav-link" data-section="p2-tabela">
+          <span class="material-symbols-rounded">extension</span>
+          <span>Desafio Tabela</span>
+        </a>
+        <a href="#p2-modelagem" class="nav-link" data-section="p2-modelagem">
+          <span class="material-symbols-rounded">architecture</span>
+          <span>Elevação/Depressão</span>
+        </a>
+        <a href="#p2-leisenos" class="nav-link" data-section="p2-leisenos">
+          <span class="material-symbols-rounded">polygon</span>
+          <span>Lei dos Senos</span>
+        </a>
+        <a href="#p2-exercicios" class="nav-link" data-section="p2-exercicios">
+          <span class="material-symbols-rounded">task</span>
+          <span>Exercícios Ativos</span>
+        </a>
+        <a href="#p2-quiz" class="nav-link" data-section="p2-quiz">
+          <span class="material-symbols-rounded">military_tech</span>
+          <span>Quiz Parte 2</span>
+        </a>
+      </div>
     </nav>
     <div class="sidebar-footer">
       <p style="font-weight: 600; margin-bottom: 0.2rem;">Prof. Diego Z. (@z.olhos)</p>
@@ -140,27 +178,40 @@
         </div>
       </div>
 
-      <div class="features-grid">
-        <div class="feature-card card" onclick="navigateTo('elementos')">
-          <div class="icon-wrapper color-orange">
-            <span class="material-symbols-rounded">explore</span>
+      <div class="tracks-title-container">
+        <h2 class="tracks-title">Escolha sua Trilha de Aprendizado 🧭</h2>
+        <p class="tracks-subtitle">Estude as relações fundamentais do triângulo retângulo ou avance para modelagem e a Lei dos Senos.</p>
+      </div>
+
+      <div class="tracks-grid">
+        <div class="track-card card" onclick="switchPart(1); navigateTo('elementos');">
+          <div class="track-header color-cyan-glow">
+            <div class="icon-wrapper color-cyan">
+              <span class="material-symbols-rounded">change_history</span>
+            </div>
+            <span class="badge badge-cyan">Parte 1</span>
           </div>
-          <h3>Batismo do Triângulo</h3>
-          <p>Aprenda a reconhecer a Hipotenusa e os Catetos Oposto e Adjacente com base no ângulo de referência.</p>
+          <h3>Trigonometria no Triângulo Retângulo</h3>
+          <p>Aprenda a batizar os lados de um triângulo retângulo, visualize seno, cosseno e tangente no simulador e descubra as deduções geométricas dos ângulos de 30°, 45° e 60°.</p>
+          <div class="track-action">
+            <span class="btn-text">Iniciar Fundamentos</span>
+            <span class="material-symbols-rounded">arrow_forward</span>
+          </div>
         </div>
-        <div class="feature-card card" onclick="navigateTo('simulador')">
-          <div class="icon-wrapper color-cyan">
-            <span class="material-symbols-rounded">science</span>
+
+        <div class="track-card card" onclick="switchPart(2); navigateTo('p2-intro');">
+          <div class="track-header color-magenta-glow">
+            <div class="icon-wrapper color-magenta">
+              <span class="material-symbols-rounded">polygon</span>
+            </div>
+            <span class="badge badge-magenta">Parte 2</span>
           </div>
-          <h3>Simulador Dinâmico</h3>
-          <p>Altere o ângulo e assista em tempo real ao crescimento e encolhimento do Seno, Cosseno e Tangente.</p>
-        </div>
-        <div class="feature-card card" onclick="navigateTo('tabela')">
-          <div class="icon-wrapper color-magenta">
-            <span class="material-symbols-rounded">table_chart</span>
+          <h3>Modelagem &amp; Lei dos Senos</h3>
+          <p>Descubra como medir distâncias inacessíveis no mundo real. Aprenda sobre ângulos de elevação e depressão e como a Lei dos Senos nos permite resolver qualquer triângulo!</p>
+          <div class="track-action">
+            <span class="btn-text">Iniciar Modelagem</span>
+            <span class="material-symbols-rounded">arrow_forward</span>
           </div>
-          <h3>Ângulos Notáveis</h3>
-          <p>Entenda a origem de valores mágicos como o 30°, 45° e 60° sem apenas precisar decorá-los!</p>
         </div>
       </div>
     </section>
@@ -603,6 +654,627 @@
         <!-- Actions -->
         <div class="quiz-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
           <button class="btn btn-primary hidden" id="btn-next-question" onclick="nextQuizQuestion()">
+            Próxima Questão <span class="material-symbols-rounded">navigate_next</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         PARTE 2: MODELAGEM E LEI DOS SENOS
+         ========================================== -->
+
+    <!-- SECTION 6: CONTEXTO HISTÓRICO -->
+    <section id="p2-intro" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 1 • Parte 2</span>
+        <h1>História &amp; Grandes Distâncias</h1>
+        <p>Como a humanidade aprendeu a medir o inacessível por meio de triângulos e ângulos.</p>
+      </div>
+
+      <div class="intro-grid">
+        <div class="intro-card card">
+          <div class="intro-card-header color-orange-glow">
+            <span class="material-symbols-rounded">public</span>
+            <h3>Eratóstenes e a Terra</h3>
+          </div>
+          <p>
+            No século III a.C., Eratóstenes descobriu que no solstício de verão em Siena, o Sol ficava no zênite (sem sombras). No mesmo instante, em Alexandria, uma estaca projetava sombra com inclinação de 7,2°. Sabendo a distância entre as cidades, ele usou proporcionalidade simples para calcular o raio da Terra com incrível precisão!
+          </p>
+          <div class="intro-visual">
+            <svg viewBox="0 0 200 120" class="mini-svg">
+              <circle cx="100" cy="180" r="100" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+              <!-- Rays of Sun -->
+              <line x1="40" y1="-10" x2="40" y2="120" stroke="var(--accent-orange)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+              <line x1="100" y1="-10" x2="100" y2="120" stroke="var(--accent-orange)" stroke-width="1.5" opacity="0.6"/>
+              <!-- Siena (Center) & Alexandria -->
+              <line x1="100" y1="80" x2="100" y2="120" stroke="#fff" stroke-width="2"/>
+              <line x1="40" y1="91" x2="15" y2="120" stroke="#fff" stroke-width="2"/>
+              <text x="110" y="95" fill="var(--text-secondary)" font-size="9">Siena</text>
+              <text x="12" y="85" fill="var(--text-secondary)" font-size="9">Alexandria</text>
+              <path d="M 100,180 L 40,91" stroke="var(--accent-purple)" stroke-width="1.5"/>
+              <path d="M 100,180 L 100,80" stroke="var(--accent-purple)" stroke-width="1.5"/>
+              <path d="M 90,165 A 15,15 0 0,0 99,165" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5"/>
+              <text x="82" y="150" fill="var(--accent-cyan)" font-size="9">7,2°</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="intro-card card">
+          <div class="intro-card-header color-cyan-glow">
+            <span class="material-symbols-rounded">filter_hdr</span>
+            <h3>Triangulação</h3>
+          </div>
+          <p>
+            Para cartografar países sem trenas gigantescas, engenheiros mediam uma única distância base na terra. Depois, subiam ao topo de colinas e mediam apenas os ângulos visuais até outros picos. Aplicando trigonometria sucessivamente, criavam redes de triângulos para calcular distâncias de centenas de quilômetros.
+          </p>
+          <div class="intro-visual">
+            <svg viewBox="0 0 200 120" class="mini-svg">
+              <polygon points="30,100 100,30 170,100" fill="rgba(180, 100%, 50%, 0.1)" stroke="var(--accent-cyan)" stroke-width="2"/>
+              <polygon points="100,30 170,100 120,115" fill="rgba(260, 95%, 65%, 0.1)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+              <polygon points="30,100 100,30 60,110" fill="rgba(320, 100%, 60%, 0.1)" stroke="var(--accent-magenta)" stroke-width="1.5"/>
+              <circle cx="30" cy="100" r="3" fill="#fff"/>
+              <circle cx="100" cy="30" r="3" fill="#fff"/>
+              <circle cx="170" cy="100" r="3" fill="#fff"/>
+              <text x="30" y="115" fill="var(--text-secondary)" font-size="8" text-anchor="middle">Base</text>
+              <line x1="30" y1="105" x2="170" y2="105" stroke="var(--accent-orange)" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="intro-card card">
+          <div class="intro-card-header color-magenta-glow">
+            <span class="material-symbols-rounded">satellite_alt</span>
+            <h3>O GPS Moderno</h3>
+          </div>
+          <p>
+            O Sistema de Posicionamento Global (GPS) não usa satélites que "olham" para você. O satélite apenas envia um sinal de rádio com o horário exato em que foi transmitido. Ao receber o sinal, seu celular calcula o tempo de viagem da luz e descobre sua distância precisa até o satélite. Cruzando as esferas de 4 satélites, determina seu local exato!
+          </p>
+          <div class="intro-visual">
+            <svg viewBox="0 0 200 120" class="mini-svg">
+              <circle cx="100" cy="100" r="10" fill="none" stroke="var(--accent-magenta)" stroke-width="1.5"/>
+              <!-- Phone -->
+              <rect x="96" y="92" width="8" height="16" rx="2" fill="#fff"/>
+              <!-- Satellites -->
+              <circle cx="40" cy="30" r="5" fill="var(--accent-cyan)"/>
+              <circle cx="160" cy="30" r="5" fill="var(--accent-cyan)"/>
+              <circle cx="100" cy="20" r="5" fill="var(--accent-cyan)"/>
+              <!-- Signal circles -->
+              <circle cx="40" cy="30" r="92.2" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3,3"/>
+              <circle cx="160" cy="30" r="92.2" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3,3"/>
+              <circle cx="100" cy="20" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3,3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('home')">
+          <span class="material-symbols-rounded">arrow_back</span> Início
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('p2-tabela')">
+          Desafio da Tabela <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 7: DESAFIO DA TABELA NOTÁVEL -->
+    <section id="p2-tabela" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 2 • Parte 2</span>
+        <h1>Desafio da Tabela Notável</h1>
+        <p>Lembre dos valores que deduzimos na Parte 1. Preencha a tabela de razões trigonométricas fundamentais!</p>
+      </div>
+
+      <div class="tabela-gamificada-layout">
+        <!-- Interactive Game Card -->
+        <div class="card game-card">
+          <div class="game-table-wrapper">
+            <table class="trig-table gamified" id="game-table">
+              <thead>
+                <tr>
+                  <th>Razão</th>
+                  <th>30°</th>
+                  <th>45°</th>
+                  <th>60°</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="table-lbl">Seno</td>
+                  <td class="game-cell" data-row="0" data-col="0" onclick="selectGameCell(0, 0)">?</td>
+                  <td class="game-cell" data-row="0" data-col="1" onclick="selectGameCell(0, 1)">?</td>
+                  <td class="game-cell" data-row="0" data-col="2" onclick="selectGameCell(0, 2)">?</td>
+                </tr>
+                <tr>
+                  <td class="table-lbl">Cosseno</td>
+                  <td class="game-cell" data-row="1" data-col="0" onclick="selectGameCell(1, 0)">?</td>
+                  <td class="game-cell" data-row="1" data-col="1" onclick="selectGameCell(1, 1)">?</td>
+                  <td class="game-cell" data-row="1" data-col="2" onclick="selectGameCell(1, 2)">?</td>
+                </tr>
+                <tr>
+                  <td class="table-lbl">Tangente</td>
+                  <td class="game-cell" data-row="2" data-col="0" onclick="selectGameCell(2, 0)">?</td>
+                  <td class="game-cell" data-row="2" data-col="1" onclick="selectGameCell(2, 1)">?</td>
+                  <td class="game-cell" data-row="2" data-col="2" onclick="selectGameCell(2, 2)">?</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pool of Values -->
+          <div class="values-pool-container">
+            <h4>Selecione um valor para a célula destacada:</h4>
+            <div class="values-pool" id="values-pool">
+              <button class="btn btn-pool" onclick="placePoolValue('1/2')">$$\frac{1}{2}$$</button>
+              <button class="btn btn-pool" onclick="placePoolValue('√2/2')">$$\frac{\sqrt{2}}{2}$$</button>
+              <button class="btn btn-pool" onclick="placePoolValue('√3/2')">$$\frac{\sqrt{3}}{2}$$</button>
+              <button class="btn btn-pool" onclick="placePoolValue('√3/3')">$$\frac{\sqrt{3}}{3}$$</button>
+              <button class="btn btn-pool" onclick="placePoolValue('1')">$$1$$</button>
+              <button class="btn btn-pool" onclick="placePoolValue('√3')">$$\sqrt{3}$$</button>
+            </div>
+          </div>
+
+          <div class="game-actions">
+            <button class="btn btn-secondary" onclick="resetGameTable()">Limpar Tabela</button>
+            <button class="btn btn-primary" onclick="validateGameTable()">Validar Respostas</button>
+          </div>
+
+          <div id="game-feedback" class="quiz-feedback hidden">
+            <span class="material-symbols-rounded" id="game-feedback-icon">check_circle</span>
+            <div class="feedback-content">
+              <h4 id="game-feedback-title">Correto!</h4>
+              <p id="game-feedback-desc"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Practical Example 1 (Hidden initially, unlocked when table is solved) -->
+        <div class="card desafio-card locked-example" id="p2-example-1-card">
+          <div class="lock-overlay" id="example-1-lock">
+            <span class="material-symbols-rounded font-large">lock</span>
+            <h3>Exemplo Bloqueado</h3>
+            <p>Preencha e valide a tabela acima corretamente para desbloquear este exemplo prático.</p>
+          </div>
+          
+          <div class="desafio-info">
+            <span class="badge desafio-badge">Prática • Seno</span>
+            <h3>Exemplo Prático 1: Decolagem do Avião</h3>
+            <p class="desafio-statement">
+              Um avião decola de um aeroporto sob um ângulo constante de inclinação de 30° com o solo horizontal. Depois de percorrer exatamente 1000 metros de distância linear no ar (seguindo a trajetória de voo), qual será a altitude (altura em relação ao solo) que a aeronave terá atingido?
+            </p>
+            <button class="btn btn-secondary btn-icon" onclick="toggleResolution('p2-ex1', this)">
+              <span class="material-symbols-rounded">visibility</span>
+              <span>Revelar Resolução Passo a Passo</span>
+            </button>
+          </div>
+          <div class="desafio-illustration">
+            <svg viewBox="0 0 280 200">
+              <line x1="10" y1="180" x2="270" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+              <!-- Airplane path -->
+              <line x1="40" y1="180" x2="230" y2="70" stroke="var(--accent-cyan)" stroke-width="3" stroke-dasharray="4,4"/>
+              <!-- Airplane shape (simple SVG path) -->
+              <g transform="translate(230, 70) rotate(-30)">
+                <path d="M-10,0 L10,0 L2,-3 L4,-8 L0,-8 L-1,-3 L-5,-3 L-8,-6 L-10,-6 Z" fill="var(--accent-magenta)"/>
+              </g>
+              <!-- Altitude projection -->
+              <line x1="230" y1="70" x2="230" y2="180" stroke="var(--accent-purple)" stroke-width="2" stroke-dasharray="3,3"/>
+              <!-- Angle arc -->
+              <path d="M 70,180 A 30,30 0 0,0 66,165" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+              <!-- Labels -->
+              <text x="75" y="176" fill="var(--accent-orange)" font-size="12" font-weight="bold">30°</text>
+              <text x="120" y="110" fill="var(--accent-cyan)" font-size="11" font-weight="bold" transform="rotate(-30, 120, 110)">1000m (Trajetória)</text>
+              <text x="240" y="130" fill="var(--accent-purple)" font-size="12" font-weight="bold">h (Altitude)</text>
+              <circle cx="40" cy="180" r="3" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="resolution-wrapper" id="resolution-wrapper-p2-ex1">
+            <div class="resolution-card">
+              <h4>
+                <span class="material-symbols-rounded">check_circle</span>
+                Resolução Prática
+              </h4>
+              <p><strong>Fórmula Aplicada:</strong></p>
+              <div class="katex-block">$$\text{sen}(30^\circ) = \frac{\text{Altitude}}{\text{Trajetória (Hipotenusa)}}$$</div>
+              <ol>
+                <li>Primeiro, desenhamos a situação: a trajetória no ar é a hipotenusa ($H = 1000\text{ m}$) e a altitude procurada é o cateto oposto ao ângulo de $30^\circ$ ($CO = h$).</li>
+                <li>Pela nossa tabela notável, sabemos que $\text{sen}(30^\circ) = \frac{1}{2}$.</li>
+                <li>Montamos a proporção: $\frac{1}{2} = \frac{h}{1000}$</li>
+                <li>Multiplicando cruzado: $2 \cdot h = 1000 \Rightarrow h = \frac{1000}{2} = 500\text{ metros}$.</li>
+                <li><strong>Resposta:</strong> O avião estará a uma altitude de exatamente <strong>500 metros</strong>.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('p2-intro')">
+          <span class="material-symbols-rounded">arrow_back</span> História
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('p2-modelagem')">
+          Elevação &amp; Depressão <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 8: ELEVAÇÃO E DEPRESSÃO -->
+    <section id="p2-modelagem" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 3 • Parte 2</span>
+        <h1>Elevação e Depressão</h1>
+        <p>Aprenda a modelar problemas reais entendendo a direção do olhar em relação à linha horizontal.</p>
+      </div>
+
+      <div class="modelagem-layout">
+        <!-- Interactive Panel (Left/Center) -->
+        <div class="interactive-panel card">
+          <div class="sim-controls">
+            <div class="control-group">
+              <h3>Selecione o Tipo de Ângulo:</h3>
+              <div class="angle-selector">
+                <button class="btn btn-toggle active" id="btn-elevacao" onclick="selectModelAngle('elevacao')">
+                  Ângulo de Elevação
+                </button>
+                <button class="btn btn-toggle" id="btn-depressao" onclick="selectModelAngle('depressao')">
+                  Ângulo de Depressão
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-container">
+            <svg viewBox="0 0 500 350" id="model-svg">
+              <!-- Sea/Ground -->
+              <rect x="0" y="300" width="500" height="50" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+              <!-- Cliff/Lighthouse on Right -->
+              <path d="M 400,300 L 400,100 L 430,100 L 430,300 Z" fill="rgba(255,255,255,0.06)" stroke="var(--accent-purple)" stroke-width="2"/>
+              <!-- Beacon glow -->
+              <circle cx="415" cy="85" r="10" fill="rgba(255,255,255,0.1)" stroke="var(--accent-orange)" stroke-width="2"/>
+              <path d="M 405,100 L 415,75 L 425,100 Z" fill="var(--accent-purple)"/>
+              
+              <!-- Boat on Left -->
+              <path d="M 80,290 L 120,290 L 130,300 L 70,300 Z" fill="rgba(255,255,255,0.2)"/>
+              <line x1="100" y1="290" x2="100" y2="260" stroke="#fff" stroke-width="1.5"/>
+              <polygon points="100,260 115,268 100,276" fill="var(--accent-magenta)"/>
+
+              <!-- Line of Sight (Observer-Beacon) -->
+              <line x1="100" y1="260" x2="415" y2="85" stroke="var(--accent-cyan)" stroke-width="3" id="model-sight-line"/>
+              
+              <!-- Horizontal reference line (Bottom) -->
+              <line x1="100" y1="260" x2="350" y2="260" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="4,4" id="model-horiz-bottom"/>
+              <!-- Horizontal reference line (Top) -->
+              <line x1="160" y1="85" x2="415" y2="85" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="4,4" id="model-horiz-top" opacity="0"/>
+
+              <!-- Angle Arc (Elevation - Bottom) -->
+              <path d="M 140,260 A 40,40 0 0,0 135,241" fill="none" stroke="var(--accent-magenta)" stroke-width="3.5" id="arc-elev"/>
+              <!-- Angle Arc (Depression - Top) -->
+              <path d="M 375,85 A 40,40 0 0,0 380,104" fill="none" stroke="var(--accent-orange)" stroke-width="3.5" id="arc-dep" opacity="0"/>
+
+              <!-- Nodes / Characters -->
+              <!-- Boat Observer -->
+              <circle cx="100" cy="260" r="5" fill="#fff" id="node-boat-obs"/>
+              <!-- Lighthouse Observer -->
+              <circle cx="415" cy="85" r="5" fill="#fff" id="node-light-obs"/>
+
+              <!-- Labels -->
+              <text x="145" y="253" id="lbl-model-elev" fill="var(--accent-magenta)" font-family="Outfit" font-size="14" font-weight="bold">θ (Elevação)</text>
+              <text x="310" y="75" id="lbl-model-dep" fill="var(--accent-orange)" font-family="Outfit" font-size="14" font-weight="bold" opacity="0">β (Depressão)</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Information Cards -->
+        <div class="info-panel">
+          <div class="card term-card active" id="model-card-info">
+            <div class="term-title color-magenta" id="model-title-text">
+              <span class="material-symbols-rounded">arrow_upward</span>
+              <h4>Ângulo de Elevação</h4>
+            </div>
+            <p id="model-desc-text">
+              Formado entre a <strong>linha horizontal de visão</strong> (chão/nível dos olhos) e a <strong>linha visual de mira</strong> direcionada para <strong>cima</strong>. É o ângulo que formamos ao olhar da base para o topo de uma torre ou montanha.
+            </p>
+          </div>
+
+          <div class="card pedagogical-insight">
+            <span class="material-symbols-rounded color-orange">lightbulb</span>
+            <h4>Fato Geométrico Crucial</h4>
+            <p>
+              Como as duas linhas horizontais de referência são paralelas, os ângulos de elevação e de depressão formam <strong>ângulos alternos internos</strong>. Isso significa que geometricamente eles são **idênticos** em medida!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practical Example 2 -->
+      <div class="card desafio-card" style="margin-top: 1.5rem;">
+        <div class="desafio-info">
+          <span class="badge desafio-badge">Prática • Tangente</span>
+          <h3>Exemplo Prático 2: Calculando a Altura do Prédio</h3>
+          <p class="desafio-statement">
+            Um engenheiro deseja determinar a altura de um prédio. Ele fica a 30 metros de distância da base do edifício e usa um teodolito (a 1,5m de altura do solo) para mirar no topo do prédio. O instrumento registra um ângulo de elevação de 45°. Qual é a altura total do prédio?
+          </p>
+          <button class="btn btn-secondary btn-icon" onclick="toggleResolution('p2-ex2', this)">
+            <span class="material-symbols-rounded">visibility</span>
+            <span>Revelar Resolução Passo a Passo</span>
+          </button>
+        </div>
+        <div class="desafio-illustration">
+          <svg viewBox="0 0 280 200">
+            <!-- Ground -->
+            <line x1="10" y1="180" x2="270" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Building -->
+            <rect x="200" y="40" width="60" height="140" fill="rgba(255,255,255,0.03)" stroke="var(--accent-purple)" stroke-width="2"/>
+            <!-- Windows for aesthetics -->
+            <path d="M 215,60 L 225,60 M 235,60 L 245,60 M 215,85 L 225,85 M 235,85 L 245,85 M 215,110 L 225,110 M 235,110 L 245,110" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+            <!-- Engineer (Observer) with 1.5m -->
+            <line x1="40" y1="180" x2="40" y2="150" stroke="#fff" stroke-width="2.5"/>
+            <circle cx="40" cy="144" r="6" fill="#fff"/>
+            <!-- Horizontal eye line -->
+            <line x1="40" y1="150" x2="200" y2="150" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <!-- Sight line to top -->
+            <line x1="40" y1="150" x2="200" y2="40" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="3,3"/>
+            <!-- Height lines -->
+            <line x1="200" y1="40" x2="200" y2="150" stroke="var(--accent-magenta)" stroke-width="2"/>
+            <!-- Angle -->
+            <path d="M 70,150 A 30,30 0 0,0 67,139" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+            <!-- Labels -->
+            <text x="73" y="145" fill="var(--accent-orange)" font-size="11" font-weight="bold">45°</text>
+            <text x="110" y="165" fill="var(--text-secondary)" font-size="10" text-anchor="middle">30 metros</text>
+            <text x="18" y="165" fill="var(--text-secondary)" font-size="9">1,5m</text>
+            <text x="190" y="100" fill="var(--accent-magenta)" font-size="12" font-weight="bold" text-anchor="end">y</text>
+            <text x="268" y="110" fill="var(--accent-purple)" font-size="12" font-weight="bold">H (Total)</text>
+          </svg>
+        </div>
+        <div class="resolution-wrapper" id="resolution-wrapper-p2-ex2">
+          <div class="resolution-card">
+            <h4>
+              <span class="material-symbols-rounded">check_circle</span>
+              Resolução Prática
+            </h4>
+            <p><strong>Fórmula Aplicada:</strong></p>
+            <div class="katex-block">$$\text{tg}(45^\circ) = \frac{y}{\text{Distância (CA)}}$$</div>
+            <ol>
+              <li>Identificamos o triângulo acima da linha dos olhos do engenheiro: a distância até o prédio é o cateto adjacente ($CA = 30\text{ m}$) e a altura parcial do prédio é o cateto oposto ($CO = y$).</li>
+              <li>Pela tabela de ângulos notáveis, sabemos que $\text{tg}(45^\circ) = 1$.</li>
+              <li>Montamos a proporção: $1 = \frac{y}{30} \Rightarrow y = 30\text{ metros}$.</li>
+              <li>Agora, modelamos o problem real: a altura total do prédio ($H$) é a altura parcial ($y$) mais a altura do instrumento de medição ($1,5\text{ m}$):
+                $$H = y + 1,5 = 30 + 1,5 = 31,5\text{ metros}$$
+              </li>
+              <li><strong>Resposta:</strong> A altura total do edifício é de <strong>31,5 metros</strong>.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('p2-tabela')">
+          <span class="material-symbols-rounded">arrow_back</span> Tabela Notável
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('p2-leisenos')">
+          Lei dos Senos <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 9: LEI DOS SENOS -->
+    <section id="p2-leisenos" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 4 • Parte 2</span>
+        <h1>Expansão: Lei dos Senos</h1>
+        <p>Aprenda a quebrar a barreira dos 90 graus e a resolver triângulos não retângulos (oblíquos).</p>
+      </div>
+
+      <!-- Warning card about Pythagoras limit -->
+      <div class="card pedagogical-alert">
+        <span class="material-symbols-rounded color-red">warning</span>
+        <div>
+          <h4>Ponto de Atenção Crucial!</h4>
+          <p>
+            O Teorema de Pitágoras ($a^2 = b^2 + c^2$) e as fórmulas diretas de seno/cosseno ($\text{sen} = CO/H$) **funcionam APENAS em triângulos retângulos** (com um ângulo de 90°). Em triângulos sem ângulo reto (oblíquos), tentar usá-los é um erro comum e grave. É aqui que entra a **Lei dos Senos**!
+          </p>
+        </div>
+      </div>
+
+      <div class="leisenos-layout">
+        <!-- Interactive Drag & Drop SVG -->
+        <div class="interactive-panel card">
+          <div class="panel-header">
+            <h3>Simulador da Lei dos Senos:</h3>
+            <p>Arraste os vértices (círculos iluminados) para modificar o triângulo e observe as proporções.</p>
+          </div>
+          
+          <div class="svg-container">
+            <svg viewBox="0 0 500 380" id="oblique-svg">
+              <rect width="100%" height="100%" fill="none"/>
+              <path d="M 20,330 L 480,330" stroke="rgba(255,255,255,0.05)" stroke-width="1.5" stroke-dasharray="4,4"/>
+              
+              <!-- Triangle Area -->
+              <polygon points="100,280 400,280 250,80" id="oblique-poly" fill="rgba(255,255,255,0.02)" stroke="var(--text-primary)" stroke-width="2.5" />
+              
+              <!-- Internal angles shading -->
+              <path d="" id="arc-A" fill="none" stroke="var(--accent-cyan)" stroke-width="3"/>
+              <path d="" id="arc-B" fill="none" stroke="var(--accent-purple)" stroke-width="3"/>
+              <path d="" id="arc-C" fill="none" stroke="var(--accent-magenta)" stroke-width="3"/>
+
+              <!-- Side labels -->
+              <text x="0" y="0" id="lbl-side-a" fill="var(--accent-cyan)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">a</text>
+              <text x="0" y="0" id="lbl-side-b" fill="var(--accent-purple)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">b</text>
+              <text x="0" y="0" id="lbl-side-c" fill="var(--accent-magenta)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">c</text>
+
+              <!-- Vertex labels -->
+              <text x="0" y="0" id="lbl-vert-A" fill="var(--text-primary)" font-family="Outfit" font-weight="bold" font-size="15">A</text>
+              <text x="0" y="0" id="lbl-vert-B" fill="var(--text-primary)" font-family="Outfit" font-weight="bold" font-size="15">B</text>
+              <text x="0" y="0" id="lbl-vert-C" fill="var(--text-primary)" font-family="Outfit" font-weight="bold" font-size="15">C</text>
+
+              <!-- Drag Handles -->
+              <circle cx="100" cy="280" r="9" fill="#fff" stroke="var(--accent-cyan)" stroke-width="3" class="pulse-dot drag-handle" id="handle-A" />
+              <circle cx="400" cy="280" r="9" fill="#fff" stroke="var(--accent-purple)" stroke-width="3" class="pulse-dot drag-handle" id="handle-B" />
+              <circle cx="250" cy="80" r="9" fill="#fff" stroke="var(--accent-magenta)" stroke-width="3" class="pulse-dot drag-handle" id="handle-C" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Law of Sines Calculation Dashboard -->
+        <div class="sim-dashboard">
+          <div class="card dashboard-card">
+            <h3>A Lei da Proporção</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">
+              Em qualquer triângulo, os comprimentos dos lados são proporcionais aos senos de seus ângulos opostos correspondentes:
+            </p>
+            
+            <div class="katex-block" id="katex-leisenos-formula">
+              $$\frac{a}{\text{sen}(A)} = \frac{b}{\text{sen}(B)} = \frac{c}{\text{sen}(C)}$$
+            </div>
+
+            <div class="leisenos-proportions">
+              <div class="prop-col" id="prop-a">
+                <span class="prop-header color-cyan">Razão A</span>
+                <span class="prop-val" id="val-ratio-a">$$\frac{12.4}{0.71} = 17.5$$</span>
+              </div>
+              <div class="prop-col" id="prop-b">
+                <span class="prop-header color-purple">Razão B</span>
+                <span class="prop-val" id="val-ratio-b">$$\frac{15.1}{0.86} = 17.5$$</span>
+              </div>
+              <div class="prop-col" id="prop-c">
+                <span class="prop-header color-magenta">Razão C</span>
+                <span class="prop-val" id="val-ratio-c">$$\frac{8.7}{0.50} = 17.5$$</span>
+              </div>
+            </div>
+
+            <div class="pedagogical-insight" style="margin-top: 1rem;">
+              <span class="material-symbols-rounded color-cyan">analytics</span>
+              <h4>Observação Matemática</h4>
+              <p>
+                Repare que, ao alterar o formato do triângulo, os valores das frações mudam, mas as três razões **permanecem rigorosamente idênticas entre si**!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practical Example 3 -->
+      <div class="card desafio-card" style="margin-top: 1.5rem;">
+        <div class="desafio-info">
+          <span class="badge desafio-badge">Prática • Lei dos Senos</span>
+          <h3>Exemplo Prático 3: A Distância até o Balão</h3>
+          <p class="desafio-statement">
+            Marcos e Roberto estão posicionados em uma planície horizontal a uma distância de 100 metros um do outro. Ambos avistam um balão meteorológico no céu sob ângulos de elevação de 45° (Marcos) e 60° (Roberto). Qual é a distância linear entre Marcos e o balão? (Considere $\text{sen}(75^\circ) \approx 0.97$).
+          </p>
+          <button class="btn btn-secondary btn-icon" onclick="toggleResolution('p2-ex3', this)">
+            <span class="material-symbols-rounded">visibility</span>
+            <span>Revelar Resolução Passo a Passo</span>
+          </button>
+        </div>
+        <div class="desafio-illustration">
+          <svg viewBox="0 0 280 200">
+            <!-- Ground line -->
+            <line x1="10" y1="180" x2="270" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Triangle vertices -->
+            <polygon points="40,180 200,180 150,60" fill="rgba(255,255,255,0.02)" stroke="var(--accent-purple)" stroke-dasharray="3,3" stroke-width="1.5"/>
+            <!-- Solid side we want to find -->
+            <line x1="40" y1="180" x2="150" y2="60" stroke="var(--accent-cyan)" stroke-width="3"/>
+            <!-- Balloon -->
+            <circle cx="150" cy="60" r="10" fill="var(--accent-magenta)"/>
+            <path d="M 150,70 L 150,90 L 145,95 L 150,100 L 155,95 L 150,90" stroke="var(--accent-magenta)" fill="none" stroke-width="1.5"/>
+            <!-- Angle arcs -->
+            <path d="M 70,180 A 30,30 0 0,0 61,159" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+            <path d="M 170,180 A 30,30 0 0,1 185,154" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+            <!-- Labels -->
+            <text x="68" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">45°</text>
+            <text x="162" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">60°</text>
+            <text x="120" y="195" fill="var(--text-secondary)" font-size="10" text-anchor="middle">100 metros</text>
+            <text x="80" y="110" fill="var(--accent-cyan)" font-size="12" font-weight="bold" transform="rotate(-47, 80, 110)">d (Distância)</text>
+            <text x="35" y="195" fill="var(--text-secondary)" font-size="9">Marcos</text>
+            <text x="205" y="195" fill="var(--text-secondary)" font-size="9">Roberto</text>
+          </svg>
+        </div>
+        <div class="resolution-wrapper" id="resolution-wrapper-p2-ex3">
+          <div class="resolution-card">
+            <h4>
+              <span class="material-symbols-rounded">check_circle</span>
+              Resolução Prática
+            </h4>
+            <p><strong>Fórmula Aplicada:</strong></p>
+            <div class="katex-block">$$\frac{d}{\text{sen}(60^\circ)} = \frac{\text{Distância}}{\text{sen}(C)}$$</div>
+            <ol>
+              <li>Desenhamos o triângulo oblíquo entre Marcos ($A$), Roberto ($B$) e o Balão ($C$). O lado oposto ao balão é a distância do solo ($c = 100\text{ m}$). Queremos descobrir a distância de Marcos ao balão, que é o lado $b$ (oposto ao ângulo de $60^\circ$ de Roberto).</li>
+              <li>A soma dos ângulos internos de qualquer triângulo é $180^\circ$. Assim, calculamos o ângulo no balão ($C$):
+                $$C = 180^\circ - (45^\circ + 60^\circ) = 180^\circ - 105^\circ = 75^\circ$$
+              </li>
+              <li>Pela Lei dos Senos, temos a proporção: $\frac{d}{\text{sen}(60^\circ)} = \frac{100}{\text{sen}(75^\circ)}$.</li>
+              <li>Sabendo da tabela notável que $\text{sen}(60^\circ) = \frac{\sqrt{3}}{2} \approx 0.866$ e que $\text{sen}(75^\circ) \approx 0.97$:
+                $$\frac{d}{0.866} = \frac{100}{0.97} \Rightarrow d \cdot 0.97 = 100 \cdot 0.866$$
+              </li>
+              <li>Fazendo os cálculos:
+                $$d \cdot 0.97 = 86.6 \Rightarrow d = \frac{86.6}{0.97} \approx 89.3\text{ metros}$$
+              </li>
+              <li><strong>Resposta:</strong> A distância de Marcos até o balão é de aproximadamente <strong>89,3 metros</strong>.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('p2-modelagem')">
+          <span class="material-symbols-rounded">arrow_back</span> Elevação/Depressão
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('p2-exercicios')">
+          Exercícios Ativos <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 10: EXERCÍCIOS ATIVOS -->
+    <section id="p2-exercicios" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Etapa 5 • Parte 2</span>
+        <h1>Exercícios Ativos</h1>
+        <p>Desenvolva sua mente geométrica interpretando e resolvendo problemas das principais provas do Brasil.</p>
+      </div>
+
+      <div class="desafios-container" id="p2-exercicios-list">
+        <!-- Rendered dynamically in JS for cleaner code and KaTeX support -->
+      </div>
+
+      <div class="navigation-actions">
+        <button class="btn btn-secondary" onclick="navigateTo('p2-leisenos')">
+          <span class="material-symbols-rounded">arrow_back</span> Lei dos Senos
+        </button>
+        <button class="btn btn-primary" onclick="navigateTo('p2-quiz')">
+          Fazer Quiz Parte 2 <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 11: QUIZ PARTE 2 -->
+    <section id="p2-quiz" class="content-section">
+      <div class="section-header">
+        <span class="section-badge">Fim da Trilha • Parte 2</span>
+        <h1>Quiz de Modelagem</h1>
+        <p>Hora de testar seus conhecimentos práticos em modelagem de problemas e Lei dos Senos!</p>
+      </div>
+
+      <div class="quiz-container">
+        <!-- Dashboard Score / Progress -->
+        <div class="quiz-progress-card card">
+          <div class="progress-info">
+            <span id="quiz2-question-num">Pergunta 1 de 5</span>
+            <span id="quiz2-score-num">Pontuação: 0</span>
+          </div>
+          <div class="quiz-progress-bar-wrapper">
+            <div class="quiz-progress-bar" id="quiz2-progress" style="width: 20%;"></div>
+          </div>
+        </div>
+
+        <!-- Dynamic Question Area -->
+        <div class="card quiz-card" id="quiz2-card-content">
+          <!-- Rendered in JS -->
+        </div>
+
+        <!-- Actions -->
+        <div class="quiz-actions" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary hidden" id="btn-next-question-2" onclick="nextQuiz2Question()">
             Próxima Questão <span class="material-symbols-rounded">navigate_next</span>
           </button>
         </div>

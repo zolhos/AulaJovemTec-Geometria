@@ -801,6 +801,839 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuizQuestion();
   };
 
-  // Inicializar o Quiz
+  /* ==========================================
+     7. LÓGICA E CONTROLES DA PARTE 2
+     ========================================== */
+
+  let currentPart = 1;
+
+  // Modifica a função navigateTo para atualizar automaticamente a aba selecionada no menu
+  const originalNavigateTo = window.navigateTo;
+  window.navigateTo = function(sectionId) {
+    originalNavigateTo(sectionId);
+    
+    // Auto-ajusta o switcher de partes com base na seção de destino
+    const p2Sections = ['p2-intro', 'p2-tabela', 'p2-modelagem', 'p2-leisenos', 'p2-exercicios', 'p2-quiz'];
+    if (p2Sections.includes(sectionId)) {
+      currentPart = 2;
+      const btnPart1 = document.getElementById('part-btn-1');
+      const btnPart2 = document.getElementById('part-btn-2');
+      if (btnPart1) btnPart1.classList.remove('active');
+      if (btnPart2) btnPart2.classList.add('active');
+      const linksP1 = document.getElementById('links-parte-1');
+      const linksP2 = document.getElementById('links-parte-2');
+      if (linksP1) linksP1.classList.add('hidden');
+      if (linksP2) linksP2.classList.remove('hidden');
+    } else if (sectionId !== 'home') {
+      currentPart = 1;
+      const btnPart1 = document.getElementById('part-btn-1');
+      const btnPart2 = document.getElementById('part-btn-2');
+      if (btnPart1) btnPart1.classList.add('active');
+      if (btnPart2) btnPart2.classList.remove('active');
+      const linksP1 = document.getElementById('links-parte-1');
+      const linksP2 = document.getElementById('links-parte-2');
+      if (linksP1) linksP1.classList.remove('hidden');
+      if (linksP2) linksP2.classList.add('hidden');
+    }
+  };
+
+  window.switchPart = function(partNum, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    currentPart = partNum;
+
+    const btnPart1 = document.getElementById('part-btn-1');
+    const btnPart2 = document.getElementById('part-btn-2');
+    const linksP1 = document.getElementById('links-parte-1');
+    const linksP2 = document.getElementById('links-parte-2');
+
+    if (partNum === 1) {
+      if (btnPart1) btnPart1.classList.add('active');
+      if (btnPart2) btnPart2.classList.remove('active');
+      if (linksP1) linksP1.classList.remove('hidden');
+      if (linksP2) linksP2.classList.add('hidden');
+    } else {
+      if (btnPart1) btnPart1.classList.remove('active');
+      if (btnPart2) btnPart2.classList.add('active');
+      if (linksP1) linksP1.classList.add('hidden');
+      if (linksP2) linksP2.classList.remove('hidden');
+    }
+
+    // Ao alternar partes, se o aluno estiver em uma seção interna, volta para a home
+    const activeSection = document.querySelector('.content-section.active');
+    if (activeSection && activeSection.id !== 'home') {
+      navigateTo('home');
+    }
+  };
+
+  /* Mini-jogo da Tabela Notável */
+  let selectedRow = -1;
+  let selectedCol = -1;
+  const correctGameAnswers = [
+    ["1/2", "√2/2", "√3/2"],
+    ["√3/2", "√2/2", "1/2"],
+    ["√3/3", "1", "√3"]
+  ];
+  let userGameAnswers = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null]
+  ];
+
+  window.selectGameCell = function(row, col) {
+    const cells = document.querySelectorAll('.game-cell');
+    cells.forEach(c => c.classList.remove('selected'));
+
+    selectedRow = row;
+    selectedCol = col;
+
+    const targetCell = document.querySelector(`.game-cell[data-row="${row}"][data-col="${col}"]`);
+    if (targetCell) {
+      targetCell.classList.add('selected');
+    }
+  };
+
+  window.placePoolValue = function(val) {
+    if (selectedRow === -1 || selectedCol === -1) return;
+
+    userGameAnswers[selectedRow][selectedCol] = val;
+
+    const targetCell = document.querySelector(`.game-cell[data-row="${selectedRow}"][data-col="${selectedCol}"]`);
+    if (targetCell) {
+      targetCell.classList.remove('selected');
+      targetCell.classList.add('filled');
+      
+      let mathVal = val;
+      if (val === '1/2') mathVal = '\\frac{1}{2}';
+      else if (val === '√2/2') mathVal = '\\frac{\\sqrt{2}}{2}';
+      else if (val === '√3/2') mathVal = '\\frac{\\sqrt{3}}{2}';
+      else if (val === '√3/3') mathVal = '\\frac{\\sqrt{3}}{3}';
+      else if (val === '√3') mathVal = '\\sqrt{3}';
+      
+      targetCell.innerHTML = `$$${mathVal}$$`;
+      autoRenderMath(targetCell);
+    }
+    
+    // Auto-seleciona a próxima célula para facilitar a experiência do usuário
+    selectedCol++;
+    if (selectedCol > 2) {
+      selectedCol = 0;
+      selectedRow++;
+    }
+    if (selectedRow > 2) {
+      selectedRow = -1;
+      selectedCol = -1;
+    } else {
+      selectGameCell(selectedRow, selectedCol);
+    }
+  };
+
+  window.resetGameTable = function() {
+    selectedRow = -1;
+    selectedCol = -1;
+    userGameAnswers = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null]
+    ];
+
+    const cells = document.querySelectorAll('.game-cell');
+    cells.forEach(cell => {
+      cell.textContent = '?';
+      cell.className = 'game-cell';
+    });
+
+    const feedback = document.getElementById('game-feedback');
+    if (feedback) feedback.classList.add('hidden');
+
+    const exampleCard = document.getElementById('p2-example-1-card');
+    if (exampleCard) {
+      exampleCard.classList.add('locked-example');
+      const overlay = document.getElementById('example-1-lock');
+      if (overlay) overlay.style.display = 'flex';
+    }
+  };
+
+  window.validateGameTable = function() {
+    let allCorrect = true;
+    let allFilled = true;
+
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 3; c++) {
+        const val = userGameAnswers[r][c];
+        const cell = document.querySelector(`.game-cell[data-row="${r}"][data-col="${c}"]`);
+        if (!val) {
+          allFilled = false;
+          allCorrect = false;
+          if (cell) cell.className = 'game-cell';
+          continue;
+        }
+
+        const isCorrect = val === correctGameAnswers[r][c];
+        if (cell) {
+          if (isCorrect) {
+            cell.className = 'game-cell correct-cell';
+          } else {
+            cell.className = 'game-cell wrong-cell';
+            allCorrect = false;
+          }
+        }
+      }
+    }
+
+    const feedback = document.getElementById('game-feedback');
+    const fbIcon = document.getElementById('game-feedback-icon');
+    const fbTitle = document.getElementById('game-feedback-title');
+    const fbDesc = document.getElementById('game-feedback-desc');
+
+    if (!feedback) return;
+
+    if (!allFilled) {
+      feedback.className = "quiz-feedback wrong-bg";
+      fbIcon.textContent = 'warning';
+      fbIcon.style.color = 'var(--accent-orange)';
+      fbTitle.textContent = 'Atenção!';
+      fbTitle.className = 'color-orange';
+      fbDesc.innerHTML = 'Por favor, preencha todas as células da tabela antes de validar.';
+      feedback.classList.remove('hidden');
+      return;
+    }
+
+    if (allCorrect) {
+      feedback.className = "quiz-feedback correct-bg";
+      fbIcon.textContent = 'check_circle';
+      fbIcon.style.color = 'var(--accent-green)';
+      fbTitle.textContent = 'Excelente! Tabela preenchida com sucesso.';
+      fbTitle.className = 'color-green';
+      fbDesc.innerHTML = 'Você relembrou perfeitamente os ângulos notáveis! O <strong>Exemplo Prático 1</strong> foi desbloqueado abaixo.';
+      feedback.classList.remove('hidden');
+
+      const exampleCard = document.getElementById('p2-example-1-card');
+      if (exampleCard) {
+        exampleCard.classList.remove('locked-example');
+        const overlay = document.getElementById('example-1-lock');
+        if (overlay) overlay.style.display = 'none';
+      }
+    } else {
+      feedback.className = "quiz-feedback wrong-bg";
+      fbIcon.textContent = 'cancel';
+      fbIcon.style.color = 'var(--accent-red)';
+      fbTitle.textContent = 'Algumas respostas estão incorretas!';
+      fbTitle.className = 'color-red';
+      fbDesc.innerHTML = 'Verifique as células marcadas em vermelho. Dica: recorde os valores do seno e do cosseno de 30° e 60°!';
+      feedback.classList.remove('hidden');
+    }
+  };
+
+  /* Elevação e Depressão */
+  window.selectModelAngle = function(type) {
+    const btnElev = document.getElementById('btn-elevacao');
+    const btnDep = document.getElementById('btn-depressao');
+    const horizBottom = document.getElementById('model-horiz-bottom');
+    const horizTop = document.getElementById('model-horiz-top');
+    const arcElev = document.getElementById('arc-elev');
+    const arcDep = document.getElementById('arc-dep');
+    const nodeBoat = document.getElementById('node-boat-obs');
+    const nodeLight = document.getElementById('node-light-obs');
+    const lblElev = document.getElementById('lbl-model-elev');
+    const lblDep = document.getElementById('lbl-model-dep');
+    
+    const cardInfo = document.getElementById('model-card-info');
+    const titleText = document.getElementById('model-title-text');
+    const descText = document.getElementById('model-desc-text');
+
+    if (!btnElev) return;
+
+    if (type === 'elevacao') {
+      btnElev.classList.add('active');
+      if (btnDep) btnDep.classList.remove('active');
+
+      if (horizBottom) horizBottom.setAttribute('opacity', '1');
+      if (horizTop) horizTop.setAttribute('opacity', '0');
+      if (arcElev) arcElev.setAttribute('opacity', '1');
+      if (arcDep) arcDep.setAttribute('opacity', '0');
+      if (lblElev) lblElev.setAttribute('opacity', '1');
+      if (lblDep) lblDep.setAttribute('opacity', '0');
+      
+      if (nodeBoat) {
+        nodeBoat.setAttribute('stroke', 'var(--accent-magenta)');
+        nodeBoat.setAttribute('stroke-width', '3');
+      }
+      if (nodeLight) nodeLight.setAttribute('stroke', 'none');
+
+      if (cardInfo) cardInfo.style.borderColor = 'var(--accent-magenta)';
+      if (titleText) {
+        titleText.className = 'term-title color-magenta';
+        titleText.innerHTML = '<span class="material-symbols-rounded">arrow_upward</span><h4>Ângulo de Elevação</h4>';
+      }
+      if (descText) {
+        descText.innerHTML = 'Formado entre a <strong>linha horizontal de visão</strong> (chão ou nível dos olhos) e a <strong>linha visual de mira</strong> direcionada para <strong>cima</strong>. É o ângulo que formamos ao olhar da base para o topo de uma torre, farol ou montanha.';
+      }
+    } else {
+      if (btnDep) btnDep.classList.add('active');
+      btnElev.classList.remove('active');
+
+      if (horizBottom) horizBottom.setAttribute('opacity', '0');
+      if (horizTop) horizTop.setAttribute('opacity', '1');
+      if (arcElev) arcElev.setAttribute('opacity', '0');
+      if (arcDep) arcDep.setAttribute('opacity', '1');
+      if (lblElev) lblElev.setAttribute('opacity', '0');
+      if (lblDep) lblDep.setAttribute('opacity', '1');
+
+      if (nodeLight) {
+        nodeLight.setAttribute('stroke', 'var(--accent-orange)');
+        nodeLight.setAttribute('stroke-width', '3');
+      }
+      if (nodeBoat) nodeBoat.setAttribute('stroke', 'none');
+
+      if (cardInfo) cardInfo.style.borderColor = 'var(--accent-orange)';
+      if (titleText) {
+        titleText.className = 'term-title color-orange';
+        titleText.innerHTML = '<span class="material-symbols-rounded">arrow_downward</span><h4>Ângulo de Depressão</h4>';
+      }
+      if (descText) {
+        descText.innerHTML = 'Formado entre a <strong>linha horizontal de visão</strong> (medida na altura dos olhos do observador no topo) e a <strong>linha visual de mira</strong> direcionada para <strong>baixo</strong>. É o ângulo formado por um piloto de avião observando o solo ou por alguém no topo de um farol mirando em um barco.';
+      }
+    }
+  };
+
+  /* Lei dos Senos - Triângulo Oblíquo SVG Arrastável */
+  let vertexA = { x: 100, y: 280 };
+  let vertexB = { x: 400, y: 280 };
+  let vertexC = { x: 250, y: 100 };
+  
+  let isDragging = false;
+  let activeHandleId = null;
+
+  function initObliqueTriangle() {
+    const obliqueSvg = document.getElementById('oblique-svg');
+    if (!obliqueSvg) return;
+
+    const handles = [
+      { id: 'A', element: document.getElementById('handle-A') },
+      { id: 'B', element: document.getElementById('handle-B') },
+      { id: 'C', element: document.getElementById('handle-C') }
+    ];
+
+    handles.forEach(h => {
+      if (!h.element) return;
+      
+      const startDrag = (e) => {
+        e.preventDefault();
+        isDragging = true;
+        activeHandleId = h.id;
+      };
+
+      h.element.addEventListener('mousedown', startDrag);
+      h.element.addEventListener('touchstart', startDrag, { passive: false });
+    });
+
+    const drag = (e) => {
+      if (!isDragging || !activeHandleId) return;
+      
+      const coords = getSVGCoords(e, obliqueSvg);
+      
+      // Restrições de arraste para manter dentro das dimensões seguras do SVG
+      let x = Math.max(35, Math.min(465, coords.x));
+      let y = Math.max(35, Math.min(310, coords.y));
+
+      if (activeHandleId === 'A') {
+        vertexA.x = Math.min(vertexB.x - 60, x);
+        vertexA.y = y;
+      } else if (activeHandleId === 'B') {
+        vertexB.x = Math.max(vertexA.x + 60, x);
+        vertexB.y = y;
+      } else if (activeHandleId === 'C') {
+        vertexC.x = x;
+        // Mantém o vértice C com uma distância vertical mínima para evitar triângulos colapsados
+        const maxAllowedY = Math.min(vertexA.y, vertexB.y) - 50;
+        vertexC.y = Math.min(maxAllowedY, y);
+      }
+
+      updateObliqueTriangle();
+    };
+
+    const stopDrag = () => {
+      isDragging = false;
+      activeHandleId = null;
+    };
+
+    window.addEventListener('mousemove', drag);
+    window.addEventListener('touchmove', drag, { passive: false });
+    window.addEventListener('mouseup', stopDrag);
+    window.addEventListener('touchend', stopDrag);
+
+    updateObliqueTriangle();
+  }
+
+  function getSVGCoords(e, svg) {
+    const rect = svg.getBoundingClientRect();
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    const x = (clientX - rect.left) * (500 / rect.width);
+    const y = (clientY - rect.top) * (380 / rect.height);
+    return { x, y };
+  }
+
+  function getAngleArcPath(center, pt1, pt2, radius) {
+    const v1 = { x: pt1.x - center.x, y: pt1.y - center.y };
+    const v2 = { x: pt2.x - center.x, y: pt2.y - center.y };
+    const len1 = Math.sqrt(v1.x*v1.x + v1.y*v1.y);
+    const len2 = Math.sqrt(v2.x*v2.x + v2.y*v2.y);
+    const u1 = { x: v1.x / len1, y: v1.y / len1 };
+    const u2 = { x: v2.x / len2, y: v2.y / len2 };
+    
+    const a1 = Math.atan2(u1.y, u1.x);
+    const a2 = Math.atan2(u2.y, u2.x);
+    
+    const start = { x: center.x + radius * Math.cos(a1), y: center.y + radius * Math.sin(a1) };
+    const end = { x: center.x + radius * Math.cos(a2), y: center.y + radius * Math.sin(a2) };
+    
+    let diff = a2 - a1;
+    while (diff < -Math.PI) diff += 2 * Math.PI;
+    while (diff > Math.PI) diff -= 2 * Math.PI;
+    const sweepFlag = diff > 0 ? 1 : 0;
+    
+    return `M ${start.x},${start.y} A ${radius},${radius} 0 0,${sweepFlag} ${end.x},${end.y}`;
+  }
+
+  function updateObliqueTriangle() {
+    const poly = document.getElementById('oblique-poly');
+    const handleA = document.getElementById('handle-A');
+    const handleB = document.getElementById('handle-B');
+    const handleC = document.getElementById('handle-C');
+    
+    const lblA = document.getElementById('lbl-vert-A');
+    const lblB = document.getElementById('lbl-vert-B');
+    const lblC = document.getElementById('lbl-vert-C');
+
+    const lblSideA = document.getElementById('lbl-side-a');
+    const lblSideB = document.getElementById('lbl-side-b');
+    const lblSideC = document.getElementById('lbl-side-c');
+
+    const arcA = document.getElementById('arc-A');
+    const arcB = document.getElementById('arc-B');
+    const arcC = document.getElementById('arc-C');
+
+    if (!poly) return;
+
+    // Atualiza polígono e alças
+    poly.setAttribute('points', `${vertexA.x},${vertexA.y} ${vertexB.x},${vertexB.y} ${vertexC.x},${vertexC.y}`);
+    handleA.setAttribute('cx', vertexA.x);
+    handleA.setAttribute('cy', vertexA.y);
+    handleB.setAttribute('cx', vertexB.x);
+    handleB.setAttribute('cy', vertexB.y);
+    handleC.setAttribute('cx', vertexC.x);
+    handleC.setAttribute('cy', vertexC.y);
+
+    // Ajusta rótulos dos vértices
+    lblA.setAttribute('x', vertexA.x - 20);
+    lblA.setAttribute('y', vertexA.y + 20);
+    lblB.setAttribute('x', vertexB.x + 10);
+    lblB.setAttribute('y', vertexB.y + 20);
+    lblC.setAttribute('x', vertexC.x - 8);
+    lblC.setAttribute('y', vertexC.y - 18);
+
+    // Calcula comprimentos
+    const dist = (p1, p2) => Math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2);
+    const side_a = dist(vertexB, vertexC); // oposto a A
+    const side_b = dist(vertexA, vertexC); // oposto a B
+    const side_c = dist(vertexA, vertexB); // oposto a C
+
+    // Escala
+    const scaleFactor = 25;
+    const val_a = side_a / scaleFactor;
+    const val_b = side_b / scaleFactor;
+    const val_c = side_c / scaleFactor;
+
+    // Rótulos de lados
+    lblSideA.setAttribute('x', (vertexB.x + vertexC.x) / 2 + 20);
+    lblSideA.setAttribute('y', (vertexB.y + vertexC.y) / 2 - 4);
+    lblSideA.textContent = `a = ${val_a.toFixed(1)}`;
+
+    lblSideB.setAttribute('x', (vertexA.x + vertexC.x) / 2 - 20);
+    lblSideB.setAttribute('y', (vertexA.y + vertexC.y) / 2 - 4);
+    lblSideB.textContent = `b = ${val_b.toFixed(1)}`;
+
+    lblSideC.setAttribute('x', (vertexA.x + vertexB.x) / 2);
+    lblSideC.setAttribute('y', (vertexA.y + vertexB.y) / 2 + 22);
+    lblSideC.textContent = `c = ${val_c.toFixed(1)}`;
+
+    // Lei dos Cossenos para ângulos
+    const angleA_rad = Math.acos((side_b**2 + side_c**2 - side_a**2) / (2 * side_b * side_c));
+    const angleB_rad = Math.acos((side_a**2 + side_c**2 - side_b**2) / (2 * side_a * side_c));
+    const angleC_rad = Math.PI - (angleA_rad + angleB_rad);
+
+    const degA = angleA_rad * 180 / Math.PI;
+    const degB = angleB_rad * 180 / Math.PI;
+    const degC = angleC_rad * 180 / Math.PI;
+
+    // Arcos
+    const R_arc = 20;
+    arcA.setAttribute('d', getAngleArcPath(vertexA, vertexC, vertexB, R_arc));
+    arcB.setAttribute('d', getAngleArcPath(vertexB, vertexA, vertexC, R_arc));
+    arcC.setAttribute('d', getAngleArcPath(vertexC, vertexB, vertexA, R_arc));
+
+    // Senos
+    const sinA = Math.sin(angleA_rad);
+    const sinB = Math.sin(angleB_rad);
+    const sinC = Math.sin(angleC_rad);
+
+    // Razões
+    const ratioA = val_a / sinA;
+    const ratioB = val_b / sinB;
+    const ratioC = val_c / sinC;
+
+    // Atualiza no DOM
+    const propA = document.getElementById('val-ratio-a');
+    const propB = document.getElementById('val-ratio-b');
+    const propC = document.getElementById('val-ratio-c');
+
+    if (propA) propA.innerHTML = `$$\\frac{${val_a.toFixed(1)}}{\\text{sen}(${Math.round(degA)}^\\circ)} = \\frac{${val_a.toFixed(1)}}{${sinA.toFixed(2)}} = ${ratioA.toFixed(1)}$$`;
+    if (propB) propB.innerHTML = `$$\\frac{${val_b.toFixed(1)}}{\\text{sen}(${Math.round(degB)}^\\circ)} = \\frac{${val_b.toFixed(1)}}{${sinB.toFixed(2)}} = ${ratioB.toFixed(1)}$$`;
+    if (propC) propC.innerHTML = `$$\\frac{${val_c.toFixed(1)}}{\\text{sen}(${Math.round(degC)}^\\circ)} = \\frac{${val_c.toFixed(1)}}{${sinC.toFixed(2)}} = ${ratioC.toFixed(1)}$$`;
+
+    autoRenderMath(document.querySelector('.leisenos-proportions'));
+  }
+
+  /* Exercícios Resolvidos P2 (OBMEP, FUVEST, Desafio) */
+  const challengesP2 = [
+    {
+      id: 1,
+      badge: "OBMEP Adaptada",
+      title: "1. A Praça Triangular",
+      statement: "Uma praça tem o formato de um triângulo cujos vértices são A, B e C. Sabe-se que o lado AB mede 80 metros, o ângulo no vértice A mede 30° e o ângulo no vértice B mede 45°. Um pedestre quer caminhar de C até o ponto B seguindo o perímetro da praça. Qual é a distância do trecho BC em metros? (Considere $\\text{sen}(105^\\circ) \\approx 0.97$).",
+      formula: "$$\\frac{BC}{\\text{sen}(30^\\circ)} = \\frac{AB}{\\text{sen}(C)}$$ ",
+      illustration: `
+        <svg viewBox="0 0 260 200">
+          <line x1="10" y1="180" x2="250" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <polygon points="30,180 230,180 170,80" fill="rgba(180, 100%, 50%, 0.1)" stroke="var(--accent-purple)" stroke-width="2"/>
+          <path d="M 60,180 A 30,30 0 0,0 56,159" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <path d="M 200,180 A 30,30 0 0,1 215,154" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <text x="65" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">30°</text>
+          <text x="190" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">45°</text>
+          <text x="130" y="195" fill="var(--text-secondary)" font-size="11" text-anchor="middle">80 metros (AB)</text>
+          <text x="210" y="130" fill="var(--accent-cyan)" font-size="11" font-weight="bold">BC = d</text>
+          <text x="25" y="195" fill="var(--text-secondary)" font-size="9">A</text>
+          <text x="235" y="195" fill="var(--text-secondary)" font-size="9">B</text>
+          <text x="170" y="70" fill="var(--text-secondary)" font-size="9" text-anchor="middle">C</text>
+        </svg>
+      `,
+      steps: [
+        "Identificamos os ângulos conhecidos do triângulo ABC: $A = 30^\\circ$ e $B = 45^\\circ$. O lado oposto ao vértice C é $AB = 80\\text{ m}$. O trecho que queremos achar é $BC$, que fica oposto ao ângulo $A = 30^\\circ$.",
+        "Como a soma dos ângulos internos de um triângulo é sempre $180^\\circ$, podemos encontrar o terceiro ângulo no vértice C: $C = 180^\\circ - (30^\\circ + 45^\\circ) = 180^\\circ - 75^\\circ = 105^\\circ$.",
+        "Aplicamos a Lei dos Senos relacionando os lados $BC$ e $AB$ com seus respectivos senos opostos: $\\frac{BC}{\\text{sen}(A)} = \\frac{AB}{\\text{sen}(C)}$.",
+        "Substituímos os valores conhecidos na fórmula: $\\frac{d}{\\text{sen}(30^\\circ)} = \\frac{80}{\\text{sen}(105^\\circ)}$.",
+        "Usando os senos aproximados da tabela e do enunciado: $\\frac{d}{0.5} = \\frac{80}{0.97}$.",
+        "Multiplicando cruzado: $d \\cdot 0.97 = 80 \\cdot 0.5 \\Rightarrow d \\cdot 0.97 = 40$.",
+        "Dividindo para encontrar a distância: $d = \\frac{40}{0.97} \\approx 41.2\\text{ metros}$.",
+        "<strong>Resposta:</strong> A distância do trecho BC é de aproximadamente <strong>41,2 metros</strong>."
+      ]
+    },
+    {
+      id: 2,
+      badge: "FUVEST Adaptada",
+      title: "2. Altura de um Farol com Afastamento",
+      statement: "Um navegador avista o topo de um farol sob um ângulo de elevação de 30° com o horizonte. Navegando 150 metros em linha reta na direção direta do farol, ele passa a avistar o mesmo topo sob um ângulo de elevação de 60°. Sabendo que o barco e a base do farol estão no mesmo nível horizontal, qual é a altura aproximada do farol?",
+      formula: "$$\\text{tg}(60^\\circ) = \\frac{h}{x} \\quad \\text{e} \\quad \\text{tg}(30^\\circ) = \\frac{h}{x + 150}$$",
+      illustration: `
+        <svg viewBox="0 0 260 200">
+          <line x1="10" y1="180" x2="250" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="220" y1="180" x2="220" y2="50" stroke="var(--accent-purple)" stroke-width="4"/>
+          <line x1="30" y1="180" x2="220" y2="50" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="3,3"/>
+          <line x1="140" y1="180" x2="220" y2="50" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="3,3"/>
+          <path d="M 60,180 A 30,30 0 0,0 56,165" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <path d="M 160,180 A 20,20 0 0,0 150,163" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <text x="65" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">30°</text>
+          <text x="156" y="172" fill="var(--accent-orange)" font-size="11" font-weight="bold">60°</text>
+          <text x="85" y="195" fill="var(--text-secondary)" font-size="10" text-anchor="middle">150m</text>
+          <text x="180" y="195" fill="var(--text-secondary)" font-size="10" text-anchor="middle">x</text>
+          <text x="235" y="110" fill="var(--accent-purple)" font-size="12" font-weight="bold">h (Farol)</text>
+        </svg>
+      `,
+      steps: [
+        "Temos dois triângulos retângulos formados: o menor (ângulo de 60°, base $x$ e altura $h$) e o maior (ângulo de 30°, base $x + 150$ e altura $h$).",
+        "Pelo triângulo de 60°: $\\text{tg}(60^\\circ) = \\frac{h}{x} \\Rightarrow \\sqrt{3} = \\frac{h}{x} \\Rightarrow h = x\\sqrt{3}$.",
+        "Pelo triângulo de 30°: $\\text{tg}(30^\\circ) = \\frac{h}{x + 150} \\Rightarrow \\frac{\\sqrt{3}}{3} = \\frac{h}{x + 150}$.",
+        "Substituímos o valor de $h = x\\sqrt{3}$ na segunda equação: $\\frac{\\sqrt{3}}{3} = \\frac{x\\sqrt{3}}{x + 150}$.",
+        "Podemos simplificar a $\\sqrt{3}$ em ambos os lados dividindo a equação: $\\frac{1}{3} = \\frac{x}{x + 150}$.",
+        "Multiplicando cruzado: $x + 150 = 3x \\Rightarrow 2x = 150 \\Rightarrow x = 75\\text{ metros}$.",
+        "Agora que temos $x$, calculamos $h$: $h = 75\\sqrt{3}$. Sabendo que $\\sqrt{3} \\approx 1.73$, temos $h \\approx 75 \\cdot 1.73 \\approx 129.75\\text{ metros}$.",
+        "<strong>Resposta:</strong> A altura do farol é de aproximadamente <strong>130 metros</strong>."
+      ]
+    },
+    {
+      id: 3,
+      badge: "Desafio • Roda Gigante",
+      title: "3. O Raio da Roda Gigante",
+      statement: "Um brinquedo em um parque de diversões contém uma estrutura em forma de triângulo não retângulo inscrito em uma roda gigante circular. Um dos lados desse triângulo mede 12 metros e fica de frente para um ângulo interno de 45° no topo. Qual é o raio total dessa roda gigante?",
+      formula: "$$\\frac{a}{\\text{sen}(A)} = 2R$$",
+      illustration: `
+        <svg viewBox="0 0 260 200">
+          <circle cx="130" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+          <polygon points="80,160 180,160 130,40" fill="rgba(320, 100%, 60%, 0.1)" stroke="var(--accent-purple)" stroke-width="2"/>
+          <path d="M 125,52 A 15,15 0 0,0 141,51" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <text x="130" y="66" fill="var(--accent-orange)" font-size="11" font-weight="bold" text-anchor="middle">45°</text>
+          <text x="130" y="178" fill="var(--accent-cyan)" font-size="12" font-weight="bold" text-anchor="middle">12 metros</text>
+          <circle cx="130" cy="100" r="3" fill="#fff"/>
+          <line x1="130" y1="100" x2="210" y2="100" stroke="var(--accent-magenta)" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <text x="170" y="93" fill="var(--accent-magenta)" font-size="11" font-weight="bold">R</text>
+        </svg>
+      `,
+      steps: [
+        "Este problema exige a extensão da Lei dos Senos: em qualquer triângulo inscrito em uma circunferência de raio R, a razão entre qualquer lado e o seno do ângulo oposto é igual ao diâmetro ($2R$): $\\frac{a}{\\text{sen}(A)} = 2R$.",
+        "Temos o lado oposto $a = 12\\text{ m}$ e o ângulo oposto correspondente $A = 45^\\circ$.",
+        "Sabemos que $\\text{sen}(45^\\circ) = \\frac{\\sqrt{2}}{2}$.",
+        "Montamos a equação: $\\frac{12}{\\text{sen}(45^\\circ)} = 2R \\Rightarrow \\frac{12}{\\sqrt{2}/2} = 2R$.",
+        "Simplificando a fração: $2R = 12 \\cdot \\frac{2}{\\sqrt{2}} \\Rightarrow 2R = \\frac{24}{\\sqrt{2}} \\Rightarrow R = \\frac{12}{\\sqrt{2}}$.",
+        "Racionalizando o denominador multiplicando por $\\sqrt{2}$: $R = \\frac{12\\sqrt{2}}{2} = 6\\sqrt{2}\\text{ metros}$.",
+        "Substituindo o valor decimal aproximado $\\sqrt{2} \\approx 1.414$, temos: $R \\approx 6 \\cdot 1.414 \\approx 8.48\\text{ metros}$.",
+        "<strong>Resposta:</strong> O raio da roda gigante é de aproximadamente <strong>8,5 metros</strong>."
+      ]
+    }
+  ];
+
+  function renderChallengesP2() {
+    const listContainer = document.getElementById('p2-exercicios-list');
+    if (!listContainer) return;
+
+    listContainer.innerHTML = challengesP2.map((ch, idx) => `
+      <div class="card desafio-card">
+        <div class="desafio-info">
+          <span class="badge desafio-badge">${ch.badge}</span>
+          <h3>${ch.title}</h3>
+          <p class="desafio-statement">${ch.statement}</p>
+          <button class="btn btn-secondary btn-icon" onclick="toggleResolution('p2-ch-${ch.id}', this)">
+            <span class="material-symbols-rounded">visibility</span>
+            <span>Revelar Resolução Passo a Passo</span>
+          </button>
+        </div>
+        <div class="desafio-illustration">
+          ${ch.illustration}
+        </div>
+        <div class="resolution-wrapper" id="resolution-wrapper-p2-ch-${ch.id}">
+          <div class="resolution-card">
+            <h4>
+              <span class="material-symbols-rounded">check_circle</span>
+              Resolução Prática
+            </h4>
+            <p><strong>Fórmula Aplicada:</strong></p>
+            <div class="katex-block">${ch.formula}</div>
+            <ol>
+              ${ch.steps.map(step => `<li>${step}</li>`).join('')}
+            </ol>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    autoRenderMath(listContainer);
+  }
+
+  /* Quiz 2 da Parte 2 */
+  const quizQuestions2 = [
+    {
+      id: 1,
+      tag: "História",
+      question: "Qual cientista grego calculou a circunferência e o raio da Terra usando proporções geométricas e sombras no solstício de verão?",
+      options: [
+        "Pitágoras de Samos",
+        "Eratóstenes de Cirene",
+        "Euclides de Alexandria",
+        "Arquimedes de Siracusa"
+      ],
+      correct: 1,
+      explanation: "Eratóstenes observou as diferenças nas sombras projetadas por estacas em Siena e Alexandria ao mesmo tempo no solstício de verão para calcular a curvatura e as dimensões da Terra com extraordinária precisão."
+    },
+    {
+      id: 2,
+      tag: "Modelagem",
+      question: "Se um mergulhador posicionado no fundo do mar vê um barco sob um ângulo de elevação de 35°, qual é o ângulo de depressão sob o qual o capitão do barco vê o mergulhador?",
+      options: [
+        "55°",
+        "45°",
+        "35°",
+        "Depende da profundidade da água"
+      ],
+      correct: 2,
+      explanation: "Como as duas linhas de horizonte (nível dos olhos do mergulhador e do capitão) são paralelas, os ângulos são alternos internos, o que significa que o ângulo de elevação é exatamente igual ao de depressão ($35^\\circ$)."
+    },
+    {
+      id: 3,
+      tag: "Teoria",
+      question: "Em quais tipos de triângulos podemos aplicar as regras da Lei dos Senos?",
+      options: [
+        "Apenas em triângulos que possuem um ângulo de 90° (retângulos).",
+        "Apenas em triângulos que têm todos os lados iguais (equiláteros).",
+        "Em qualquer triângulo do plano, seja retângulo ou não (oblíquos).",
+        "Apenas em triângulos onde a soma dos ângulos é maior que 180°."
+      ],
+      correct: 2,
+      explanation: "A Lei dos Senos é uma lei geral que se aplica a **qualquer triângulo** (seja ele retângulo, acutângulo ou obtuso). A trigonometria do triângulo retângulo tradicional é apenas um caso especial dessa lei."
+    },
+    {
+      id: 4,
+      tag: "Cálculo Prático",
+      question: "Em um triângulo qualquer ABC, o lado a mede 10cm e o ângulo oposto A mede 30°. Se o ângulo B mede 45°, quanto mede o lado b oposto a B?",
+      options: [
+        "$10\\sqrt{2}$ cm",
+        "5 cm",
+        "10 cm",
+        "$5\\sqrt{3}$ cm"
+      ],
+      correct: 0,
+      explanation: "Aplicamos a Lei dos Senos: $\\frac{10}{\\text{sen}(30^\\circ)} = \\frac{b}{\\text{sen}(45^\\circ)} \\Rightarrow \\frac{10}{0.5} = \\frac{b}{\\sqrt{2}/2} \\Rightarrow 20 = \\frac{b}{\\sqrt{2}/2} \\Rightarrow b = 20 \\cdot \\frac{\\sqrt{2}}{2} = 10\\sqrt{2}$ cm."
+    },
+    {
+      id: 5,
+      tag: "Modelagem de Altura",
+      question: "Você está posicionado a 20m de uma árvore e vê seu topo sob um ângulo de elevação de 60°. Ignorando sua altura, qual fórmula você aplica para achar a altura h da árvore?",
+      options: [
+        "$\\text{sen}(60^\\circ) = \\frac{h}{20}$",
+        "$\\text{cos}(60^\\circ) = \\frac{20}{h}$",
+        "$\\text{tg}(60^\\circ) = \\frac{h}{20}$",
+        "$\\text{tg}(60^\\circ) = \\frac{20}{h}$"
+      ],
+      correct: 2,
+      explanation: "A altura da árvore é o Cateto Oposto (CO) ao ângulo de 60° e a distância de 20m é o Cateto Adjacente (CA). A razão que usa CO e CA é a Tangente: $\\text{tg}(60^\\circ) = \\frac{h}{20}$."
+    }
+  ];
+
+  let currentQuestionIndex2 = 0;
+  let quizScore2 = 0;
+
+  function renderQuiz2Question() {
+    const cardContent = document.getElementById('quiz2-card-content');
+    const btnNext = document.getElementById('btn-next-question-2');
+    if (!cardContent) return;
+
+    btnNext.classList.add('hidden');
+
+    if (currentQuestionIndex2 >= quizQuestions2.length) {
+      showQuiz2Score();
+      return;
+    }
+
+    const q = quizQuestions2[currentQuestionIndex2];
+    
+    document.getElementById('quiz2-question-num').textContent = `Pergunta ${currentQuestionIndex2 + 1} de ${quizQuestions2.length}`;
+    document.getElementById('quiz2-score-num').textContent = `Pontuação: ${quizScore2}`;
+    const progressPercent = (currentQuestionIndex2 / quizQuestions2.length) * 100;
+    document.getElementById('quiz2-progress').style.width = `${progressPercent}%`;
+
+    cardContent.innerHTML = `
+      <span class="quiz-question-tag">${q.tag}</span>
+      <h2>${q.question}</h2>
+      <div class="quiz-options">
+        ${q.options.map((opt, idx) => `
+          <button class="quiz-option" onclick="selectQuiz2Option(${idx})">
+            <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="quiz2-feedback-box" class="quiz-feedback hidden">
+        <span class="material-symbols-rounded" id="feedback2-icon">check_circle</span>
+        <div class="feedback-content">
+          <h4 id="feedback2-title">Correto!</h4>
+          <p id="feedback2-desc"></p>
+        </div>
+      </div>
+    `;
+    autoRenderMath(cardContent);
+  }
+
+  window.selectQuiz2Option = function(selectedIdx) {
+    const q = quizQuestions2[currentQuestionIndex2];
+    const optionsButtons = document.querySelectorAll('#quiz2-card-content .quiz-option');
+    const feedbackBox = document.getElementById('quiz2-feedback-box');
+    const fbIcon = document.getElementById('feedback2-icon');
+    const fbTitle = document.getElementById('feedback2-title');
+    const fbDesc = document.getElementById('feedback2-desc');
+    const btnNext = document.getElementById('btn-next-question-2');
+
+    optionsButtons.forEach(btn => btn.setAttribute('disabled', 'true'));
+
+    const isCorrect = selectedIdx === q.correct;
+    
+    if (isCorrect) {
+      quizScore2++;
+      optionsButtons[selectedIdx].classList.add('correct');
+      feedbackBox.className = "quiz-feedback correct-bg";
+      fbIcon.textContent = 'check_circle';
+      fbIcon.style.color = 'var(--accent-green)';
+      fbTitle.textContent = 'Excelente! Você acertou.';
+      fbTitle.className = 'color-green';
+    } else {
+      optionsButtons[selectedIdx].classList.add('wrong');
+      optionsButtons[q.correct].classList.add('correct');
+      feedbackBox.className = "quiz-feedback wrong-bg";
+      fbIcon.textContent = 'cancel';
+      fbIcon.style.color = 'var(--accent-red)';
+      fbTitle.textContent = 'Oops! Não foi dessa vez.';
+      fbTitle.className = 'color-red';
+    }
+
+    document.getElementById('quiz2-score-num').textContent = `Pontuação: ${quizScore2}`;
+
+    fbDesc.innerHTML = q.explanation;
+    feedbackBox.classList.remove('hidden');
+
+    autoRenderMath(feedbackBox);
+    autoRenderMath(document.getElementById('quiz2-card-content'));
+
+    btnNext.classList.remove('hidden');
+  };
+
+  window.nextQuiz2Question = function() {
+    currentQuestionIndex2++;
+    renderQuiz2Question();
+  };
+
+  function showQuiz2Score() {
+    const cardContent = document.getElementById('quiz2-card-content');
+    const btnNext = document.getElementById('btn-next-question-2');
+    if (btnNext) btnNext.classList.add('hidden');
+
+    document.getElementById('quiz2-progress').style.width = '100%';
+    document.getElementById('quiz2-question-num').textContent = `Quiz Finalizado!`;
+
+    const pct = (quizScore2 / quizQuestions2.length) * 100;
+    const isPass = pct >= 60;
+    
+    cardContent.innerHTML = `
+      <div class="score-screen">
+        <div class="score-visual ${isPass ? 'pass' : 'fail'}">
+          ${quizScore2}/${quizQuestions2.length}
+        </div>
+        <h2>${isPass ? 'Parabéns, Mestre da Modelagem!' : 'Continue Praticando!'}</h2>
+        <p>
+          Você acertou <strong>${quizScore2}</strong> de <strong>${quizQuestions2.length}</strong> perguntas (${pct}% de aproveitamento). 
+          ${isPass 
+            ? 'Você domina os conceitos da Lei dos Senos e modelagem real de problemas trigonométricos!' 
+            : 'Revise os Simuladores e resolva os exercícios para fixar os conceitos.'}
+        </p>
+        <button class="btn btn-primary" onclick="restartQuiz2()">
+          Tentar Novamente <span class="material-symbols-rounded">replay</span>
+        </button>
+      </div>
+    `;
+  }
+
+  window.restartQuiz2 = function() {
+    currentQuestionIndex2 = 0;
+    quizScore2 = 0;
+    renderQuiz2Question();
+  };
+
+  // Inicializações da Parte 2
+  renderChallengesP2();
+  renderQuiz2Question();
+  initObliqueTriangle();
+  selectModelAngle('elevacao');
+
+  // Inicializar o Quiz da Parte 1
   renderQuizQuestion();
 });
