@@ -117,16 +117,13 @@
     </div>
   </aside>
 
-  <!-- Mobile Top Bar & Menu Toggle -->
-  <header class="mobile-header card">
-    <div class="logo" onclick="navigateTo('home')" title="Voltar ao início">
-      <span class="material-symbols-rounded">change_history</span>
-      <h2>Trigono<span>Mind</span></h2>
-    </div>
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menu">
-      <span class="material-symbols-rounded">menu</span>
-    </button>
-  </header>
+  <!-- Botão de Gaveta Mobile Flutuante e Discreto -->
+  <button class="menu-toggle floating-btn" id="menuToggle" aria-label="Abrir Menu">
+    <span class="material-symbols-rounded">menu</span>
+  </button>
+
+  <!-- Sobreposição de Fundo para Fechar o Menu -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <!-- Main Content Layout -->
   <main class="main-content">
@@ -980,7 +977,7 @@
             <span class="material-symbols-rounded color-orange">lightbulb</span>
             <h4>Fato Geométrico Crucial</h4>
             <p>
-              Como as duas linhas horizontais de referência são paralelas, os ângulos de elevação e de depressão formam <strong>ângulos alternos internos</strong>. Isso significa que geometricamente eles são **idênticos** em medida!
+              Como as duas linhas horizontais de referência são paralelas, os ângulos de elevação e de depressão formam <strong>ângulos alternos internos</strong>. Isso significa que geometricamente eles são <b>idênticos</b> em medida!
             </p>
           </div>
         </div>
@@ -1071,7 +1068,7 @@
         <div>
           <h4>Ponto de Atenção Crucial!</h4>
           <p>
-            O Teorema de Pitágoras ($a^2 = b^2 + c^2$) e as fórmulas diretas de seno/cosseno ($\text{sen} = CO/H$) **funcionam APENAS em triângulos retângulos** (com um ângulo de 90°). Em triângulos sem ângulo reto (oblíquos), tentar usá-los é um erro comum e grave. É aqui que entra a **Lei dos Senos**!
+            O Teorema de Pitágoras ($a^2 = b^2 + c^2$) e as fórmulas diretas de seno/cosseno ($\text{sen} = CO/H$) <b>funcionam APENAS em triângulos retângulos</b> (com um ângulo de 90°). Em triângulos sem ângulo reto (oblíquos), tentar usá-los é um erro comum e grave. É aqui que entra a <b>Lei dos Senos</b>!
           </p>
         </div>
       </div>
@@ -1098,9 +1095,16 @@
               <path d="" id="arc-C" fill="none" stroke="var(--accent-magenta)" stroke-width="3"/>
 
               <!-- Side labels -->
-              <text x="0" y="0" id="lbl-side-a" fill="var(--accent-cyan)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">a</text>
-              <text x="0" y="0" id="lbl-side-b" fill="var(--accent-purple)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">b</text>
-              <text x="0" y="0" id="lbl-side-c" fill="var(--accent-magenta)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">c</text>
+              <!-- Side labels (Unique IDs to avoid duplication) -->
+              <text x="0" y="0" id="lbl-oblique-side-a" fill="var(--accent-cyan)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">a</text>
+              <text x="0" y="0" id="lbl-oblique-side-b" fill="var(--accent-purple)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">b</text>
+              <text x="0" y="0" id="lbl-oblique-side-c" fill="var(--accent-magenta)" font-family="Outfit" font-size="13" font-weight="bold" text-anchor="middle">c</text>
+
+              <!-- Angle value labels -->
+              <text x="0" y="0" id="lbl-angle-A" fill="var(--accent-cyan)" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">A = 0°</text>
+              <text x="0" y="0" id="lbl-angle-B" fill="var(--accent-purple)" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">B = 0°</text>
+              <text x="0" y="0" id="lbl-angle-C" fill="var(--accent-magenta)" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">C = 0°</text>
+
 
               <!-- Vertex labels -->
               <text x="0" y="0" id="lbl-vert-A" fill="var(--text-primary)" font-family="Outfit" font-weight="bold" font-size="15">A</text>
@@ -1146,7 +1150,7 @@
               <span class="material-symbols-rounded color-cyan">analytics</span>
               <h4>Observação Matemática</h4>
               <p>
-                Repare que, ao alterar o formato do triângulo, os valores das frações mudam, mas as três razões **permanecem rigorosamente idênticas entre si**!
+                Repare que, ao alterar o formato do triângulo, os valores das frações mudam, mas as três razões <b>permanecem rigorosamente idênticas entre si</b>!
               </p>
             </div>
           </div>

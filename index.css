@@ -265,16 +265,78 @@ body {
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 60px;
+    top: 0;
     left: -100%;
     width: 280px;
-    height: calc(100vh - 60px);
-    z-index: 120;
-    border-radius: 0 20px 0 0;
+    height: 100vh;
+    z-index: 140;
+    border-radius: 0 20px 20px 0;
     transition: var(--transition-smooth);
+    padding-top: 5rem; /* Espaço para o botão flutuante no topo */
+  }
+  .sidebar .logo {
+    display: none !important; /* Esconde logo interna no mobile para evitar duplicação */
   }
   .sidebar.active {
     left: 0;
+  }
+}
+
+/* Floating Menu Button & Overlay Styles */
+.menu-toggle.floating-btn {
+  position: fixed;
+  top: 1.2rem;
+  left: 1.2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  color: var(--text-primary);
+  display: none; /* Escondido no desktop */
+  justify-content: center;
+  align-items: center;
+  z-index: 150;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+.menu-toggle.floating-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-focus);
+  transform: scale(1.05);
+}
+.menu-toggle.floating-btn span {
+  font-size: 1.5rem;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 130;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle.floating-btn {
+    display: flex; /* Exibe no mobile */
+  }
+  .sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 

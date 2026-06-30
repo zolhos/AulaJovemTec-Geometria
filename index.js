@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
       sidebar.classList.remove('active');
       const icon = menuToggle.querySelector('span');
       if (icon) icon.textContent = 'menu';
+      const overlay = document.getElementById('sidebarOverlay');
+      if (overlay) overlay.classList.remove('active');
     }
   };
 
@@ -47,10 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuToggle) {
     menuToggle.addEventListener('click', () => {
       sidebar.classList.toggle('active');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (overlay) {
+        overlay.classList.toggle('active');
+      }
       const icon = menuToggle.querySelector('span');
       if (icon) {
         icon.textContent = sidebar.classList.contains('active') ? 'close' : 'menu';
       }
+    });
+  }
+
+  // Clique na sobreposição para fechar o menu mobile
+  const overlayEl = document.getElementById('sidebarOverlay');
+  if (overlayEl) {
+    overlayEl.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlayEl.classList.remove('active');
+      const icon = menuToggle.querySelector('span');
+      if (icon) icon.textContent = 'menu';
     });
   }
 
@@ -1021,8 +1038,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fbIcon.textContent = 'cancel';
       fbIcon.style.color = 'var(--accent-red)';
       fbTitle.textContent = 'Algumas respostas estão incorretas!';
-      fbTitle.className = 'color-red';
-      fbDesc.innerHTML = 'Verifique as células marcadas em vermelho. Dica: recorde os valores do seno e do cosseno de 30° e 60°!';
+      fbDesc.innerHTML = 'Dica: verifique as células em vermelho.';
       feedback.classList.remove('hidden');
     }
   };
@@ -1209,9 +1225,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const lblB = document.getElementById('lbl-vert-B');
     const lblC = document.getElementById('lbl-vert-C');
 
-    const lblSideA = document.getElementById('lbl-side-a');
-    const lblSideB = document.getElementById('lbl-side-b');
-    const lblSideC = document.getElementById('lbl-side-c');
+    const lblSideA = document.getElementById('lbl-oblique-side-a');
+    const lblSideB = document.getElementById('lbl-oblique-side-b');
+    const lblSideC = document.getElementById('lbl-oblique-side-c');
+
+    const lblAngleA = document.getElementById('lbl-angle-A');
+    const lblAngleB = document.getElementById('lbl-angle-B');
+    const lblAngleC = document.getElementById('lbl-angle-C');
 
     const arcA = document.getElementById('arc-A');
     const arcB = document.getElementById('arc-B');
@@ -1249,17 +1269,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const val_c = side_c / scaleFactor;
 
     // Rótulos de lados
-    lblSideA.setAttribute('x', (vertexB.x + vertexC.x) / 2 + 20);
-    lblSideA.setAttribute('y', (vertexB.y + vertexC.y) / 2 - 4);
-    lblSideA.textContent = `a = ${val_a.toFixed(1)}`;
+    if (lblSideA) {
+      lblSideA.setAttribute('x', (vertexB.x + vertexC.x) / 2 + 20);
+      lblSideA.setAttribute('y', (vertexB.y + vertexC.y) / 2 - 4);
+      lblSideA.textContent = `a = ${val_a.toFixed(1)}`;
+    }
 
-    lblSideB.setAttribute('x', (vertexA.x + vertexC.x) / 2 - 20);
-    lblSideB.setAttribute('y', (vertexA.y + vertexC.y) / 2 - 4);
-    lblSideB.textContent = `b = ${val_b.toFixed(1)}`;
+    if (lblSideB) {
+      lblSideB.setAttribute('x', (vertexA.x + vertexC.x) / 2 - 20);
+      lblSideB.setAttribute('y', (vertexA.y + vertexC.y) / 2 - 4);
+      lblSideB.textContent = `b = ${val_b.toFixed(1)}`;
+    }
 
-    lblSideC.setAttribute('x', (vertexA.x + vertexB.x) / 2);
-    lblSideC.setAttribute('y', (vertexA.y + vertexB.y) / 2 + 22);
-    lblSideC.textContent = `c = ${val_c.toFixed(1)}`;
+    if (lblSideC) {
+      lblSideC.setAttribute('x', (vertexA.x + vertexB.x) / 2);
+      lblSideC.setAttribute('y', (vertexA.y + vertexB.y) / 2 + 22);
+      lblSideC.textContent = `c = ${val_c.toFixed(1)}`;
+    }
 
     // Lei dos Cossenos para ângulos
     const angleA_rad = Math.acos((side_b**2 + side_c**2 - side_a**2) / (2 * side_b * side_c));
@@ -1275,6 +1301,23 @@ document.addEventListener('DOMContentLoaded', () => {
     arcA.setAttribute('d', getAngleArcPath(vertexA, vertexC, vertexB, R_arc));
     arcB.setAttribute('d', getAngleArcPath(vertexB, vertexA, vertexC, R_arc));
     arcC.setAttribute('d', getAngleArcPath(vertexC, vertexB, vertexA, R_arc));
+
+    // Ajusta rótulos dos valores de ângulos
+    if (lblAngleA) {
+      lblAngleA.setAttribute('x', vertexA.x + 36);
+      lblAngleA.setAttribute('y', vertexA.y - 8);
+      lblAngleA.textContent = `A = ${Math.round(degA)}°`;
+    }
+    if (lblAngleB) {
+      lblAngleB.setAttribute('x', vertexB.x - 36);
+      lblAngleB.setAttribute('y', vertexB.y - 8);
+      lblAngleB.textContent = `B = ${Math.round(degB)}°`;
+    }
+    if (lblAngleC) {
+      lblAngleC.setAttribute('x', vertexC.x);
+      lblAngleC.setAttribute('y', vertexC.y + 26);
+      lblAngleC.textContent = `C = ${Math.round(degC)}°`;
+    }
 
     // Senos
     const sinA = Math.sin(angleA_rad);
@@ -1366,31 +1409,33 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       id: 3,
-      badge: "Desafio • Roda Gigante",
-      title: "3. O Raio da Roda Gigante",
-      statement: "Um brinquedo em um parque de diversões contém uma estrutura em forma de triângulo não retângulo inscrito em uma roda gigante circular. Um dos lados desse triângulo mede 12 metros e fica de frente para um ângulo interno de 45° no topo. Qual é o raio total dessa roda gigante?",
-      formula: "$$\\frac{a}{\\text{sen}(A)} = 2R$$",
+      badge: "Desafio • Navegação",
+      title: "3. A Travessia do Canal",
+      statement: "Um navio posicionado no ponto C precisa navegar entre duas boias de sinalização, A e B, localizadas na entrada de um canal. A distância entre as boias A e B é de 150 metros. O capitão mede o ângulo CAB como sendo 60° e o ângulo CBA como sendo 45°. Qual é a distância aproximada do navio (ponto C) até a boia A? (Considere $\\text{sen}(75^\\circ) \\approx 0.97$).",
+      formula: "$$\\frac{AC}{\\text{sen}(45^\\circ)} = \\frac{AB}{\\text{sen}(C)}$$",
       illustration: `
         <svg viewBox="0 0 260 200">
-          <circle cx="130" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-          <polygon points="80,160 180,160 130,40" fill="rgba(320, 100%, 60%, 0.1)" stroke="var(--accent-purple)" stroke-width="2"/>
-          <path d="M 125,52 A 15,15 0 0,0 141,51" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
-          <text x="130" y="66" fill="var(--accent-orange)" font-size="11" font-weight="bold" text-anchor="middle">45°</text>
-          <text x="130" y="178" fill="var(--accent-cyan)" font-size="12" font-weight="bold" text-anchor="middle">12 metros</text>
-          <circle cx="130" cy="100" r="3" fill="#fff"/>
-          <line x1="130" y1="100" x2="210" y2="100" stroke="var(--accent-magenta)" stroke-width="1.5" stroke-dasharray="3,3"/>
-          <text x="170" y="93" fill="var(--accent-magenta)" font-size="11" font-weight="bold">R</text>
+          <line x1="10" y1="180" x2="250" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <polygon points="50,180 210,180 160,70" fill="rgba(320, 100%, 60%, 0.1)" stroke="var(--accent-purple)" stroke-width="2"/>
+          <path d="M 75,180 A 25,25 0 0,0 72,158" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <path d="M 185,180 A 25,25 0 0,1 193,156" fill="none" stroke="var(--accent-orange)" stroke-width="2"/>
+          <text x="80" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">60°</text>
+          <text x="175" y="174" fill="var(--accent-orange)" font-size="11" font-weight="bold">45°</text>
+          <text x="130" y="195" fill="var(--text-secondary)" font-size="11" text-anchor="middle">150 metros (AB)</text>
+          <text x="85" y="120" fill="var(--accent-cyan)" font-size="11" font-weight="bold">AC = b</text>
+          <text x="45" y="195" fill="var(--text-secondary)" font-size="9">A</text>
+          <text x="215" y="195" fill="var(--text-secondary)" font-size="9">B</text>
+          <text x="160" y="60" fill="var(--text-secondary)" font-size="9" text-anchor="middle">C (Navio)</text>
         </svg>
       `,
       steps: [
-        "Este problema exige a extensão da Lei dos Senos: em qualquer triângulo inscrito em uma circunferência de raio R, a razão entre qualquer lado e o seno do ângulo oposto é igual ao diâmetro ($2R$): $\\frac{a}{\\text{sen}(A)} = 2R$.",
-        "Temos o lado oposto $a = 12\\text{ m}$ e o ângulo oposto correspondente $A = 45^\\circ$.",
-        "Sabemos que $\\text{sen}(45^\\circ) = \\frac{\\sqrt{2}}{2}$.",
-        "Montamos a equação: $\\frac{12}{\\text{sen}(45^\\circ)} = 2R \\Rightarrow \\frac{12}{\\sqrt{2}/2} = 2R$.",
-        "Simplificando a fração: $2R = 12 \\cdot \\frac{2}{\\sqrt{2}} \\Rightarrow 2R = \\frac{24}{\\sqrt{2}} \\Rightarrow R = \\frac{12}{\\sqrt{2}}$.",
-        "Racionalizando o denominador multiplicando por $\\sqrt{2}$: $R = \\frac{12\\sqrt{2}}{2} = 6\\sqrt{2}\\text{ metros}$.",
-        "Substituindo o valor decimal aproximado $\\sqrt{2} \\approx 1.414$, temos: $R \\approx 6 \\cdot 1.414 \\approx 8.48\\text{ metros}$.",
-        "<strong>Resposta:</strong> O raio da roda gigante é de aproximadamente <strong>8,5 metros</strong>."
+        "Identificamos os dados do problema: a distância entre as boias é o lado $c = 150\\text{ m}$ (oposto a C). Os ângulos conhecidos na base são $A = 60^\\circ$ e $B = 45^\\circ$. A distância do navio C até a boia A é o lado $b$ (oposto ao ângulo $B = 45^\\circ$).",
+        "Como a soma dos ângulos internos de um triângulo é $180^\\circ$, podemos encontrar o terceiro ângulo no vértice C (navio): $C = 180^\\circ - (60^\\circ + 45^\\circ) = 180^\\circ - 105^\\circ = 75^\\circ$.",
+        "Pela Lei dos Senos, relacionamos as medidas: $\\frac{AC}{\\text{sen}(B)} = \\frac{AB}{\\text{sen}(C)} \\Rightarrow \\frac{b}{\\text{sen}(45^\\circ)} = \\frac{150}{\\text{sen}(75^\\circ)}$.",
+        "Substituímos os valores dos senos correspondentes. Sabemos que $\\text{sen}(45^\\circ) \\approx 0.71$ e o enunciado fornece $\\text{sen}(75^\\circ) \\approx 0.97$: $\\frac{b}{0.71} = \\frac{150}{0.97}$.",
+        "Multiplicando cruzado para isolar $b$: $b \\cdot 0.97 = 150 \\cdot 0.71 \\Rightarrow b \\cdot 0.97 = 106.5$.",
+        "Dividindo ambos os lados: $b = \\frac{106.5}{0.97} \\approx 109.8\\text{ metros}.",
+        "<strong>Resposta:</strong> A distância do navio até a boia A é de aproximadamente <strong>109,8 metros</strong>."
       ]
     }
   ];
